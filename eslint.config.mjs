@@ -8,16 +8,21 @@ import prettierPlugin from 'eslint-plugin-prettier';
 
 /** @type {import('eslint').FlatConfig[]} */
 const config = [
+  // =======================
+  // TypeScript / TSX 文件
+  // =======================
   {
-    // 针对 TS / TSX / JS / JSX 文件
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
-
+    files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
         ecmaFeatures: { jsx: true },
+        project: './tsconfig.json', // 指向你的 tsconfig.json
+      },
+      globals: {
+        NodeJS: 'readonly',
       },
     },
 
@@ -30,21 +35,29 @@ const config = [
     },
 
     rules: {
+      // Prettier
       'prettier/prettier': 'error',
-      'react/react-in-jsx-scope': 'off',
+
+      // TS 规则
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
-      'react/prop-types': 'off',
-    },
 
+      // React 规则
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+      'jsx-a11y/alt-text': 'warn',
+    },
     settings: {
       react: { version: 'detect' },
     },
-
     ignores: ['node_modules/', 'dist/', 'build/', 'src-tauri/', '.vscode/', '.idea/'],
   },
 
-  // 针对 JS / JSX 文件的默认环境
+  // =======================
+  // JS / JSX 文件
+  // =======================
   {
     files: ['**/*.js', '**/*.jsx'],
     languageOptions: {
@@ -57,14 +70,40 @@ const config = [
         process: 'readonly',
       },
     },
+    plugins: {
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+      'jsx-a11y': jsxA11yPlugin,
+      prettier: prettierPlugin,
+    },
+    rules: {
+      'prettier/prettier': 'error',
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+      'jsx-a11y/alt-text': 'warn',
+    },
+    settings: {
+      react: { version: 'detect' },
+    },
   },
 
-  // 针对 TS / TSX 文件的全局
+  // =======================
+  // Vitest / Jest 测试文件
+  // =======================
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['**/*.test.{ts,tsx,js,jsx}', '**/*.spec.{ts,tsx,js,jsx}'],
     languageOptions: {
       globals: {
-        NodeJS: 'readonly',
+        describe: 'readonly',
+        it: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
       },
     },
   },
