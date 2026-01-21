@@ -1,51 +1,42 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
+import {Suspense} from "react";
 import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {MantineProvider} from "@mantine/core";
+import Loading from "./Loading.tsx";
+import {ColorSchemeType} from "./types/ISetting.ts";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
-
-  return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={
+                    <Suspense fallback={<Loading />}>
+                        <MantineProvider
+                            defaultColorScheme={ColorSchemeType.Dark}
+                            theme={{
+                                fontFamily: 'cursive, Siemreap, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji',
+                                colors: {
+                                    dark: [
+                                        "#C1C2C5",
+                                        "#A6A7AB",
+                                        "#909296",
+                                        "#5C5F66",
+                                        "#373A40",
+                                        "#2C2E33",
+                                        "#1A1B1E",
+                                        "#141517",
+                                        "#1A1B1E",
+                                        "#101113",
+                                    ],
+                                },
+                            }} >
+                        </MantineProvider>
+                    </Suspense>
+                } />
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
