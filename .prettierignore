@@ -1,0 +1,19 @@
+# 忽略 node_modules
+node_modules/
+
+# 忽略构建产物
+dist/
+build/
+
+# 忽略 Tauri 后端源码
+src-tauri/*
+
+# 忽略某些配置文件夹
+.vscode/
+.idea/
+
+# 忽略特定文件类型
+*.min.js
+*.d.ts
+README.md
+*lock.yaml
