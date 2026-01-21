@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { I18nextProvider } from 'react-i18next';
 import i18next from 'i18next';
+import '@mantine/core/styles.css';
 
 // prevent right click menu
 document.addEventListener('contextmenu', (e) => e.preventDefault());
