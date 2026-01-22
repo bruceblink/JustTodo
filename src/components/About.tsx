@@ -1,10 +1,70 @@
-import { memo } from 'react';
-import { Flex } from '@mantine/core';
+import { memo, useMemo, useState } from 'react';
+import { Anchor, Flex, Text } from '@mantine/core';
+import { openUrl } from '@tauri-apps/plugin-opener';
 
 function About() {
+  const [appVersion] = useState('.....');
+  const titleAndLinks = useMemo(
+    () => [
+      {
+        title: 'Developed by:',
+        link: {
+          url: 'https://github.com/bruceblink',
+          label: '@bruceblink',
+        },
+      },
+      {
+        title: 'Source code:',
+        link: {
+          url: 'https://github.com/bruceblink/JustTodo',
+          label: '@bruceblink/JustTodo',
+        },
+      },
+      {
+        title: 'Report a bug:',
+        link: {
+          url: 'https://github.com/bruceblink/JustTodo/issues',
+          label: '@bruceblink/JustTodo/issues',
+        },
+      },
+      {
+        title: 'Community: ',
+        link: {
+          url: 'https://github.com/bruceblink/JustTodo/discussions',
+          label: '@bruceblink/JustTodo/discussions',
+        },
+      },
+      {
+        title: 'Buy me a coffee:',
+        link: {
+          url: 'https://www.buymeacoffee.com/bruceblink',
+          label: 'BuyMeACoffee/@bruceblink',
+        },
+      },
+    ],
+    [],
+  );
+
   return (
     <Flex align={'center'} justify={'center'} direction={'column'} gap={'md'}>
-      "这是关于页面"
+      <Text fw={700}>JustTodo</Text>
+      <Text display={'flex'}>
+        <Anchor
+          mx={'xs'}
+          onClick={() =>
+            openUrl(`https://github.com/bruceblink/JustTodo/releases/tag/v${appVersion}`)
+          }
+        ></Anchor>
+      </Text>
+
+      {titleAndLinks.map((item, index) => (
+        <Text key={`titleAndLinks-${index}`} display={'flex'}>
+          {item.title}
+          <Anchor mx={'xs'} onClick={() => openUrl(item.link.url)}>
+            {item.link.label}
+          </Anchor>
+        </Text>
+      ))}
     </Flex>
   );
 }
