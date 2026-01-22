@@ -1,25 +1,42 @@
 // src/components/MainWindow.tsx
 import { memo, useMemo, useState } from 'react';
-import { AppShell, ActionIcon, Box, Flex, ScrollArea, Stack, Text } from '@mantine/core';
+import {
+  AppShell,
+  ActionIcon,
+  Box,
+  Flex,
+  ScrollArea,
+  Stack,
+  Text,
+  useMantineColorScheme,
+} from '@mantine/core';
 import { IconCat, IconSettings, IconInfoCircle, IconSun, IconMoonStars } from '@tabler/icons-react';
 import { t } from 'i18next';
 
 import Home from './Home';
 import Settings from './Settings';
 import About from './About';
-import { ColorSchemeType, ESettingTab, SideNavBarTabs } from '../types/ISetting';
+import { ColorScheme, ColorSchemeType, ESettingTab, SideNavBarTabs } from '../types/ISetting';
+import { useSettingStore } from '../hooks/useSettingStore.tsx';
+import { DispatchType } from '../types/IEvents.ts';
+import { handleSettingChange } from '../utils/handleSettingChange.ts';
 
 function MainWindow() {
+  /** 获取设置 */
+  const { theme: colorScheme } = useSettingStore();
   /** 当前激活视图（桌面应用：状态 ≠ 路由） */
   const [activeTab, setActiveTab] = useState<ESettingTab>(ESettingTab.Home);
 
   /** 示例：主题状态（后面你可以接 store） */
-  const colorScheme = ColorSchemeType.Dark;
+  const { setColorScheme } = useMantineColorScheme();
 
-  const toggleColorScheme = () => {
-    console.log(
-      colorScheme === ColorSchemeType.Dark ? ColorSchemeType.Light : ColorSchemeType.Dark,
-    );
+  const toggleColorScheme = (value?: ColorScheme) => {
+    const newTheme =
+      value ||
+      (colorScheme === ColorSchemeType.Dark ? ColorSchemeType.Light : ColorSchemeType.Dark);
+
+    setColorScheme(newTheme);
+    handleSettingChange(DispatchType.ChangeAppTheme, newTheme);
   };
 
   /** Activity Bar 注册表 */
@@ -80,7 +97,7 @@ function MainWindow() {
             <ActionIcon
               size={36}
               variant="subtle"
-              onClick={toggleColorScheme}
+              onClick={() => toggleColorScheme()}
               title={t('Toggle theme')}
             >
               {colorScheme === ColorSchemeType.Dark ? (

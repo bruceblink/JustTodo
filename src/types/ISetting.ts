@@ -19,3 +19,13 @@ export interface SideNavBarTabs {
   label: string;
   tab: ESettingTab;
 }
+
+export interface ISettingStoreVariables {
+  language: string;
+  theme: ColorScheme;
+}
+
+export interface ISettingStoreState extends ISettingStoreVariables {
+  setLanguage: (newLanguage: string) => void;
+  setTheme: (newTheme: ColorScheme) => void;
+}
