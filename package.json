@@ -4,6 +4,14 @@
   "version": "0.1.0",
   "type": "module",
   "packageManager": "pnpm@10.28.1",
+  "author": "[likanug <likanug.g@qq.com>](https://likanug.top)",
+  "authorUrl": "https://likanug.top",
+  "sponsoringUrl": "https://buymeacoffee.com/bruceblink",
+  "license": "GNU GPLv3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bruceblink/JustTodo"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
