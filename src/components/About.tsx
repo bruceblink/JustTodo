@@ -1,10 +1,12 @@
 import { memo, useEffect, useMemo, useState } from 'react';
-import { Anchor, Flex, Text } from '@mantine/core';
+import { Anchor, Button, Flex, Text } from '@mantine/core';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import { getVersion } from '@tauri-apps/api/app';
+import { useTranslation } from 'react-i18next';
 
 function About() {
   const [appVersion, setAppVersion] = useState('.....');
+  const { t } = useTranslation();
 
   useEffect(() => {
     getVersion().then((version) => {
@@ -66,9 +68,11 @@ function About() {
           onClick={() =>
             openUrl(`https://github.com/bruceblink/JustTodo/releases/tag/v${appVersion}`)
           }
-        ></Anchor>
+        >
+          v{appVersion}
+        </Anchor>
       </Text>
-
+      <Button variant={'outline'}>{t('Check for updates')}</Button>
       {titleAndLinks.map((item, index) => (
         <Text key={`titleAndLinks-${index}`} display={'flex'}>
           {item.title}
