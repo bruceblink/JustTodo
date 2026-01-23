@@ -1,9 +1,21 @@
-import { memo, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { Anchor, Flex, Text } from '@mantine/core';
 import { openUrl } from '@tauri-apps/plugin-opener';
+import { getVersion } from '@tauri-apps/api/app';
 
 function About() {
-  const [appVersion] = useState('.....');
+  const [appVersion, setAppVersion] = useState('.....');
+
+  useEffect(() => {
+    getVersion().then((version) => {
+      setAppVersion(version);
+    });
+
+    return () => {
+      setAppVersion('.....');
+    };
+  }, []);
+
   const titleAndLinks = useMemo(
     () => [
       {
