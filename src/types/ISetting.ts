@@ -1,4 +1,5 @@
 import React, { MemoExoticComponent } from 'react';
+import { DispatchType } from './IEvents.ts';
 
 export type ColorScheme = ColorSchemeType.Light | ColorSchemeType.Dark;
 
@@ -23,9 +24,26 @@ export interface SideNavBarTabs {
 export interface ISettingStoreVariables {
   language: string;
   theme: ColorScheme;
+  allowAutoStartUp: boolean;
 }
 
 export interface ISettingStoreState extends ISettingStoreVariables {
   setLanguage: (newLanguage: string) => void;
   setTheme: (newTheme: ColorScheme) => void;
+  setAllowAutoStartUp: (newBoolean: boolean) => void;
+}
+
+export interface ISettingsContent {
+  title: string;
+  description: string;
+  checked: boolean;
+  dispatchType: DispatchType;
+  component?: React.ReactNode;
+}
+
+export interface SettingButtonProps {
+  title: string;
+  description: string;
+  btnLabel: string;
+  btnFunction: () => void;
 }

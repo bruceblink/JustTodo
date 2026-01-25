@@ -12,4 +12,8 @@ export const useSettingStore = create<ISettingStoreState>()((set) => ({
   setTheme: (newTheme) => {
     set({ theme: newTheme });
   },
+  allowAutoStartUp: defaultSettings.allowAutoStartUp ?? false,
+  setAllowAutoStartUp: (newBoolean) => {
+    set({ allowAutoStartUp: newBoolean });
+  },
 }));
