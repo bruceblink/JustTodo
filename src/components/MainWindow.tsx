@@ -11,7 +11,6 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { IconCat, IconSettings, IconInfoCircle, IconSun, IconMoonStars } from '@tabler/icons-react';
-import { t } from 'i18next';
 
 import Home from './Home';
 import Settings from './Settings';
@@ -20,6 +19,7 @@ import { ColorScheme, ColorSchemeType, ESettingTab, SideNavBarTabs } from '../ty
 import { useSettingStore } from '../hooks/useSettingStore.tsx';
 import { DispatchType } from '../types/IEvents.ts';
 import { handleSettingChange } from '../utils/handleSettingChange.ts';
+import { useTranslation } from 'react-i18next';
 
 function MainWindow() {
   /** 获取设置 */
@@ -29,6 +29,8 @@ function MainWindow() {
 
   /** 示例：主题状态（后面你可以接 store） */
   const { setColorScheme } = useMantineColorScheme();
+  /** i18n */
+  const { t } = useTranslation();
 
   const toggleColorScheme = (value?: ColorScheme) => {
     const newTheme =
@@ -61,7 +63,7 @@ function MainWindow() {
         Component: About,
       },
     ],
-    [],
+    [t],
   );
 
   const CurrentView = tabs.find((t) => t.tab === activeTab)?.Component;
