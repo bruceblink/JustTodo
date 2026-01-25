@@ -19,7 +19,7 @@ const config = [
         ecmaVersion: 'latest',
         sourceType: 'module',
         ecmaFeatures: { jsx: true },
-        project: './tsconfig.json', // 指向你的 tsconfig.json
+        project: ['./tsconfig.json', './tsconfig.node.json'], // 指向你的 tsconfig.json
       },
       globals: {
         NodeJS: 'readonly',
