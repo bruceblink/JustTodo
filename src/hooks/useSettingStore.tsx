@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { ColorScheme, ISettingStoreState } from '../types/ISetting.ts';
 import defaultSettings from '../../src-tauri/src/app/default/settings.json';
 
-// initialize settings
+// initialize settings-ui
 export const useSettingStore = create<ISettingStoreState>()((set) => ({
   language: localStorage.getItem('language') ?? defaultSettings.language,
   setLanguage: (newLanguage) => {

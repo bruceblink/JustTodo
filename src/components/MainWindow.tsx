@@ -13,7 +13,7 @@ import {
 import { IconCat, IconSettings, IconInfoCircle, IconSun, IconMoonStars } from '@tabler/icons-react';
 
 import Home from './Home';
-import Settings from './Settings';
+import Settings from './settings-ui/Settings.tsx';
 import About from './About';
 import { ColorScheme, ColorSchemeType, ESettingTab, SideNavBarTabs } from '../types/ISetting';
 import { useSettingStore } from '../hooks/useSettingStore.tsx';
