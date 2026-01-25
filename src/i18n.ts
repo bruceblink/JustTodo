@@ -7,7 +7,7 @@ import zhTWTranslation from './locale/zh-TW/translation.json';
 
 const defaultLanguage = 'zh-CN';
 
-i18next.use(initReactI18next).init({
+void i18next.use(initReactI18next).init({
   lng: localStorage.getItem('language') || defaultLanguage,
   fallbackLng: defaultLanguage,
   resources: {

@@ -1,6 +1,6 @@
 import { Switch, Group, Text, Divider } from '@mantine/core';
-import { ISettingsContent } from '../../types/ISetting.ts';
-import { handleSettingChange } from '../../utils/handleSettingChange.ts';
+import { ISettingsContent } from '@/types/ISetting.ts';
+import { handleSettingChange } from '@utils/handleSettingChange.ts';
 
 function SettingSwitch({
   title,

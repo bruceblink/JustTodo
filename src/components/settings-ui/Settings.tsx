@@ -1,11 +1,11 @@
 import React, { memo } from 'react';
 import { Select } from '@mantine/core';
 import { IconLanguage } from '@tabler/icons-react';
-import languages from '../../locale/languages.ts';
-import { handleSettingChange } from '../../utils/handleSettingChange.ts';
-import { DispatchType } from '../../types/IEvents.ts';
+import languages from '@/locale/languages.ts';
+import { handleSettingChange } from '@utils/handleSettingChange.ts';
+import { DispatchType } from '@/types/IEvents.ts';
 import { useTranslation } from 'react-i18next';
-import { useSettingStore } from '../../hooks/useSettingStore.tsx';
+import { useSettingStore } from '@/hooks/useSettingStore.tsx';
 import SettingSwitch from './SettingSwitch.tsx';
 
 interface ISettingsContent {

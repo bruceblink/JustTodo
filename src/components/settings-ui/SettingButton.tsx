@@ -1,5 +1,5 @@
 import { Group, Text, Divider, Button } from '@mantine/core';
-import { SettingButtonProps } from '../../types/ISetting.ts';
+import { SettingButtonProps } from '@/types/ISetting.ts';
 
 function SettingButton({ title, description, btnLabel, btnFunction }: SettingButtonProps) {
   return (
