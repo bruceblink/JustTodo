@@ -1,4 +1,3 @@
-// src/components/MainWindow.tsx
 import { memo, useMemo, useState } from 'react';
 import {
   AppShell,
