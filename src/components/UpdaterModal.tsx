@@ -1,43 +1,28 @@
 import { Anchor, Box, Button, Modal, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { openUrl } from '@tauri-apps/plugin-opener';
+import { relaunch } from '@tauri-apps/plugin-process';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { useEffect, useState } from 'react';
-import { checkForUpdate, installUpdate } from '@/services/updater';
 import type { Update } from '@tauri-apps/plugin-updater';
 
 interface UpdaterModalProps {
-  /** 是否自动弹窗检查更新 */
-  autoCheck?: boolean;
+  opened: boolean;
+  onClose: () => void;
+  update: Update | null;
 }
 
-export default function UpdaterModal({ autoCheck = true }: UpdaterModalProps) {
+export default function UpdaterModal({ opened, onClose, update }: UpdaterModalProps) {
   const { t } = useTranslation();
-  const [update, setUpdate] = useState<Update | null>(null);
-  const [opened, setOpened] = useState(false);
-
-  useEffect(() => {
-    if (!autoCheck) return;
-
-    const fetchUpdate = async () => {
-      const result = await checkForUpdate();
-      if (result) {
-        setUpdate(result);
-        setOpened(true);
-      }
-    };
-
-    void fetchUpdate();
-  }, [autoCheck]);
 
   const handleInstall = async () => {
     if (!update) return;
-    await installUpdate(update);
+    await update.downloadAndInstall();
+    await relaunch();
   };
 
   return (
-    <Modal opened={opened} onClose={() => setOpened(false)} title={t('Update available')} size="lg">
+    <Modal opened={opened} onClose={onClose} title={t('Update available')} size="lg">
       {update && (
         <Box>
           <Text>
@@ -56,8 +41,15 @@ export default function UpdaterModal({ autoCheck = true }: UpdaterModalProps) {
             </Box>
           )}
 
-          <Box mt="md">
-            <Button variant="outline" onClick={() => setOpened(false)}>
+          <Box
+            mt="md"
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: '8px',
+            }}
+          >
+            <Button variant="outline" onClick={onClose}>
               {t('Ignore')}
             </Button>
             <Button onClick={handleInstall}>{t('Install')}</Button>
