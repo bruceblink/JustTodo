@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import UpdaterModal from './UpdaterModal';
 import { checkForUpdate } from '@/services/updater';
 import { Update } from '@tauri-apps/plugin-updater';
+import { REPOSITORY_URL, SPONSORING_URL } from '@/lib/author.ts';
 
 function About() {
   const [appVersion, setAppVersion] = useState('.....');
@@ -32,29 +33,29 @@ function About() {
   const titleAndLinks = [
     {
       title: 'Developed by:',
-      link: { url: 'https://github.com/bruceblink', label: '@bruceblink' },
+      link: { url: `https://github.com/bruceblink`, label: '@bruceblink' },
     },
     {
       title: 'Source code:',
-      link: { url: 'https://github.com/bruceblink/JustTodo', label: '@bruceblink/JustTodo' },
+      link: { url: REPOSITORY_URL, label: '@bruceblink/JustTodo' },
     },
     {
       title: 'Report a bug:',
       link: {
-        url: 'https://github.com/bruceblink/JustTodo/issues',
+        url: `${REPOSITORY_URL}/issues`,
         label: '@bruceblink/JustTodo/issues',
       },
     },
     {
       title: 'Community: ',
       link: {
-        url: 'https://github.com/bruceblink/JustTodo/discussions',
+        url: `${REPOSITORY_URL}/discussions`,
         label: '@bruceblink/JustTodo/discussions',
       },
     },
     {
       title: 'Buy me a coffee:',
-      link: { url: 'https://www.buymeacoffee.com/bruceblink', label: 'BuyMeACoffee/@bruceblink' },
+      link: { url: SPONSORING_URL, label: 'BuyMeACoffee/@bruceblink' },
     },
   ];
 
@@ -63,12 +64,7 @@ function About() {
       <Text fw={700}>JustTodo</Text>
 
       <Text display="flex">
-        <Anchor
-          mx="xs"
-          onClick={() =>
-            openUrl(`https://github.com/bruceblink/JustTodo/releases/tag/v${appVersion}`)
-          }
-        >
+        <Anchor mx="xs" onClick={() => openUrl(`${REPOSITORY_URL}/releases/tag/v${appVersion}`)}>
           v{appVersion}
         </Anchor>
       </Text>
