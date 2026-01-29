@@ -3,32 +3,19 @@ import { Anchor, Button, Flex, Text } from '@mantine/core';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import { getVersion } from '@tauri-apps/api/app';
 import { useTranslation } from 'react-i18next';
-import UpdaterModal from './UpdaterModal';
-import { checkForUpdate } from '@/services/updater';
-import { Update } from '@tauri-apps/plugin-updater';
-import { REPOSITORY_URL, SPONSORING_URL } from '@/lib/author.ts';
+import UpdaterModal from '@/components/UpdaterModal';
+import { useUpdater } from '@/hooks/useUpdater';
+import { REPOSITORY_URL, SPONSORING_URL } from '@/lib/author';
 
 function About() {
   const [appVersion, setAppVersion] = useState('.....');
-  const [update, setUpdate] = useState<Update | null>(null);
-  const [modalOpened, setModalOpened] = useState(false);
-  const [checking, setChecking] = useState(false);
   const { t } = useTranslation();
+
+  const { update, checking, hasUpdate, checkForUpdate, installUpdate } = useUpdater();
 
   useEffect(() => {
     void getVersion().then(setAppVersion);
   }, []);
-
-  // 手动检查更新
-  const handleCheckUpdate = async () => {
-    setChecking(true);
-    const result = await checkForUpdate();
-    if (result) {
-      setUpdate(result);
-      setModalOpened(true);
-    }
-    setChecking(false);
-  };
 
   const titleAndLinks = [
     {
@@ -47,7 +34,7 @@ function About() {
       },
     },
     {
-      title: 'Community: ',
+      title: 'Community:',
       link: {
         url: `${REPOSITORY_URL}/discussions`,
         label: '@bruceblink/JustTodo/discussions',
@@ -69,7 +56,7 @@ function About() {
         </Anchor>
       </Text>
 
-      <Button variant="outline" loading={checking} onClick={handleCheckUpdate}>
+      <Button variant="outline" loading={checking} onClick={checkForUpdate}>
         {t('Check for updates')}
       </Button>
 
@@ -82,8 +69,14 @@ function About() {
         </Text>
       ))}
 
-      {/* 调用弹窗组件 */}
-      <UpdaterModal update={update} opened={modalOpened} onClose={() => setModalOpened(false)} />
+      {hasUpdate && update && (
+        <UpdaterModal
+          opened={hasUpdate}
+          update={update}
+          onClose={() => {}}
+          onInstall={installUpdate}
+        />
+      )}
     </Flex>
   );
 }
