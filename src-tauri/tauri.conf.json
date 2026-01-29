@@ -22,6 +22,12 @@
       "capabilities": ["default"]
     }
   },
+  "plugins": {
+    "updater": {
+      "endpoints": ["https://github.com/bruceblink/JustTodo/releases/latest/download/latest.json"],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDg3QTI3QTU5QTc4NzdGNzIKUldSeWY0ZW5XWHFpaDR1aXlBaUFVdnNySXRwU3RCZjE2Mnk1dk1DWXFHR1g0OHpzZVRDaks3bUgK"
+    }
+  },
   "bundle": {
     "active": true,
     "targets": "all",
