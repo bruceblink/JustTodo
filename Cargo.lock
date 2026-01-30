@@ -1994,6 +1994,7 @@ dependencies = [
 name = "justtodo"
 version = "0.0.1"
 dependencies = [
+ "log",
  "serde",
  "serde_json",
  "tauri",
@@ -4253,6 +4254,7 @@ dependencies = [
  "tauri-plugin",
  "thiserror 2.0.18",
  "time",
+ "tracing",
 ]
 
 [[package]]

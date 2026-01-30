@@ -14,7 +14,7 @@ repository = "https://github.com/bruceblink/JustTodo"
 [workspace.dependencies]
 tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
-tauri-plugin-log = "2"
+tauri-plugin-log = { version = "2", features = ["tracing"] }
 tauri-plugin-autostart = "2"
 tauri-plugin-single-instance = "2"
 tauri-plugin-dialog = "2"
@@ -22,3 +22,9 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tauri-plugin-updater = "2"
 tauri-build = "2"
+log = "0.4"
+windows-sys = { version = "0.61", features = ["Win32_System_Console"]}
+crossterm = { version = "0.29.0", features = [
+    "event-stream",
+    "osc52",
+]}
