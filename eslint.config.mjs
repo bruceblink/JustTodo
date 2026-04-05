@@ -8,6 +8,10 @@ import prettierPlugin from 'eslint-plugin-prettier';
 
 /** @type {import('eslint').FlatConfig[]} */
 const config = [
+  {
+    ignores: ['node_modules/', 'dist/', 'build/', 'target/', 'src-tauri/', '.vscode/', '.idea/'],
+  },
+
   // =======================
   // TypeScript / TSX 文件
   // =======================
@@ -52,7 +56,6 @@ const config = [
     settings: {
       react: { version: 'detect' },
     },
-    ignores: ['node_modules/', 'dist/', 'build/', 'src-tauri/', '.vscode/', '.idea/'],
   },
 
   // =======================
