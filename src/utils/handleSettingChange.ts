@@ -5,12 +5,15 @@ import { DispatchType } from '../types/IEvents';
 import { info } from '@tauri-apps/plugin-log';
 import { disable, enable, isEnabled } from '@tauri-apps/plugin-autostart';
 import { patchAppSettings } from '@/settings/settingsPersistence.ts';
+import { featureFlags } from '@/config/features.ts';
 
 interface IHandleSettingChange {
   (dispatchType: DispatchType, newValue: string | boolean | number): void;
 }
 
 export function toggleAutoStartUp(allowAutoStartUp: boolean) {
+  if (!featureFlags.autostart) return;
+
   (async () => {
     const hasEnabledStartUp = await isEnabled();
 
@@ -38,6 +41,7 @@ export const handleSettingChange: IHandleSettingChange = (dispatchType, newValue
       void patchAppSettings({ theme: newValue as ColorScheme });
       return;
     case DispatchType.SwitchAppAutoStartUp:
+      if (!featureFlags.autostart) return;
       toggleAutoStartUp(newValue as boolean);
       setAllowAutoStartUp(newValue as boolean);
       void patchAppSettings({ allowAutoStartUp: newValue as boolean });

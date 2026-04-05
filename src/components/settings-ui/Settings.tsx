@@ -7,6 +7,7 @@ import { DispatchType } from '@/types/IEvents.ts';
 import { useTranslation } from 'react-i18next';
 import { useSettingStore } from '@/hooks/useSettingStore.tsx';
 import { isEnabled } from '@tauri-apps/plugin-autostart';
+import { featureFlags } from '@/config/features.ts';
 import SettingSwitch from './SettingSwitch.tsx';
 
 interface ISettingsContent {
@@ -22,6 +23,11 @@ function Settings() {
   const { allowAutoStartUp, setAllowAutoStartUp } = useSettingStore();
 
   useEffect(() => {
+    if (!featureFlags.autostart) {
+      setAllowAutoStartUp(false);
+      return;
+    }
+
     let active = true;
 
     (async () => {
@@ -42,14 +48,16 @@ function Settings() {
     };
   }, [setAllowAutoStartUp]);
 
-  const settingSwitches: ISettingsContent[] = [
-    {
-      title: t('Auto start-up'),
-      description: t('Automatically open JustTodo every time u start the computer'),
-      checked: allowAutoStartUp,
-      dispatchType: DispatchType.SwitchAppAutoStartUp,
-    },
-  ];
+  const settingSwitches: ISettingsContent[] = featureFlags.autostart
+    ? [
+        {
+          title: t('Auto start-up'),
+          description: t('Automatically open JustTodo every time u start the computer'),
+          checked: allowAutoStartUp,
+          dispatchType: DispatchType.SwitchAppAutoStartUp,
+        },
+      ]
+    : [];
 
   const SettingSwitches = settingSwitches.map((setting, index) => {
     return <SettingSwitch {...setting} key={index} />;

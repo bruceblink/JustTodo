@@ -27,6 +27,10 @@
 - 已新增 `src/features` / `src/shared` / `src/platform`
 - 已补充路径别名 `@features/*`、`@shared/*`、`@platform/*`
 
+7. P1-3 可选能力开关：进行中
+- 已增加 `scaffold.features`（`updater`/`autostart`）
+- 已实现前端按开关隐藏/禁用对应能力
+
 ## 里程碑概览
 
 1. M1（1-2 周）：工程稳定化

@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { check, type Update } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
+import { featureFlags } from '@/config/features.ts';
 
 export function useUpdater() {
   const [update, setUpdate] = useState<Update | null>(null);
@@ -9,6 +10,7 @@ export function useUpdater() {
 
   /** 手动 / 自动检查更新（只检查一次，除非你主动扩展） */
   const checkForUpdate = useCallback(async () => {
+    if (!featureFlags.updater) return null;
     if (checked) return update;
 
     setChecking(true);
@@ -24,6 +26,7 @@ export function useUpdater() {
 
   /** 下载并安装更新，然后重启 */
   const installUpdate = useCallback(async () => {
+    if (!featureFlags.updater) return;
     if (!update) return;
     await update.downloadAndInstall();
     await relaunch();
@@ -32,7 +35,8 @@ export function useUpdater() {
   return {
     update,
     checking,
-    hasUpdate: !!update,
+    hasUpdate: featureFlags.updater && !!update,
+    updaterEnabled: featureFlags.updater,
     checked,
     checkForUpdate,
     installUpdate,

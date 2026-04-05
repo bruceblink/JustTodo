@@ -102,12 +102,15 @@ pnpm init:template -- \
   --author-email "you@example.com" \
   --author-url "https://example.com" \
   --repository-url "https://github.com/your-org/my-desktop-app" \
-  --sponsoring-url "https://buymeacoffee.com/yourname"
+  --sponsoring-url "https://buymeacoffee.com/yourname" \
+  --enable-updater true \
+  --enable-autostart true
 ```
 
 说明：
 
 - `--updater-endpoint` 可选；未提供时自动使用 `${repository-url}/releases/latest/download/latest.json`
+- `--enable-updater` / `--enable-autostart` 可选，默认都为 `true`
 - 可先加 `--dry-run` 查看将应用的参数，不写文件
 
 ## 作为“完整脚手架”还需要补齐什么

@@ -29,6 +29,24 @@ function required(args, key) {
   return value;
 }
 
+function parseBooleanArg(value, fallback) {
+  if (value === undefined || value === null || value === 'true') return fallback;
+  if (typeof value !== 'string') return fallback;
+  const normalized = value.trim().toLowerCase();
+  if (normalized === 'true' || normalized === '1' || normalized === 'yes' || normalized === 'on') {
+    return true;
+  }
+  if (
+    normalized === 'false' ||
+    normalized === '0' ||
+    normalized === 'no' ||
+    normalized === 'off'
+  ) {
+    return false;
+  }
+  return fallback;
+}
+
 function toRustLibName(packageName) {
   return `${packageName.replace(/-/g, '_')}_lib`;
 }
@@ -95,6 +113,8 @@ async function main() {
     args['updater-endpoint'] && args['updater-endpoint'] !== 'true'
       ? args['updater-endpoint']
       : `${repositoryUrl.replace(/\/$/, '')}/releases/latest/download/latest.json`;
+  const enableUpdater = parseBooleanArg(args['enable-updater'], true);
+  const enableAutostart = parseBooleanArg(args['enable-autostart'], true);
 
   const rustLibName = toRustLibName(packageName);
   const autostartArg = toAutostartArg(packageName);
@@ -107,6 +127,13 @@ async function main() {
     packageJson.authorUrl = authorUrl;
     packageJson.sponsoringUrl = sponsoringUrl;
     packageJson.repository = { type: 'git', url: repositoryUrl };
+    packageJson.scaffold = {
+      ...(packageJson.scaffold ?? {}),
+      features: {
+        updater: enableUpdater,
+        autostart: enableAutostart,
+      },
+    };
     await writeJson('package.json', packageJson);
 
     const tauriConf = await readJson('src-tauri/tauri.conf.json');
@@ -170,6 +197,8 @@ async function main() {
   console.log(`- bundle-id: ${bundleId}`);
   console.log(`- repository-url: ${repositoryUrl}`);
   console.log(`- updater-endpoint: ${updaterEndpoint}`);
+  console.log(`- enable-updater: ${enableUpdater}`);
+  console.log(`- enable-autostart: ${enableAutostart}`);
   console.log(`- dry-run: ${dryRun}`);
 }
 

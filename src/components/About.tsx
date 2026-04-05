@@ -12,7 +12,8 @@ function About() {
   const [updaterOpened, setUpdaterOpened] = useState(false);
   const { t } = useTranslation();
 
-  const { update, checking, hasUpdate, checkForUpdate, installUpdate } = useUpdater();
+  const { update, checking, hasUpdate, updaterEnabled, checkForUpdate, installUpdate } =
+    useUpdater();
 
   useEffect(() => {
     void getVersion().then(setAppVersion);
@@ -62,9 +63,11 @@ function About() {
         </Anchor>
       </Text>
 
-      <Button variant="outline" loading={checking} onClick={handleCheckForUpdates}>
-        {t('Check for updates')}
-      </Button>
+      {updaterEnabled && (
+        <Button variant="outline" loading={checking} onClick={handleCheckForUpdates}>
+          {t('Check for updates')}
+        </Button>
+      )}
 
       {titleAndLinks.map((item, index) => (
         <Text key={index} display="flex">

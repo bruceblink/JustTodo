@@ -12,6 +12,12 @@
     "type": "git",
     "url": "https://github.com/bruceblink/JustTodo"
   },
+  "scaffold": {
+    "features": {
+      "updater": true,
+      "autostart": true
+    }
+  },
   "scripts": {
     "init:template": "node scripts/init-template.mjs",
     "dev": "vite",
