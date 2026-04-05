@@ -112,6 +112,7 @@ pnpm init:template -- \
 
 - `--updater-endpoint` 可选；未提供时自动使用 `${repository-url}/releases/latest/download/latest.json`
 - `--enable-updater` / `--enable-autostart` 可选，默认都为 `true`
+- 关闭开关时，会同步更新 `package.json` feature flags 与 Tauri capability 权限
 - 可先加 `--dry-run` 查看将应用的参数，不写文件
 
 ## 作为“完整脚手架”还需要补齐什么

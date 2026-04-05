@@ -147,6 +147,26 @@ async function main() {
     }
     await writeJson('src-tauri/tauri.conf.json', tauriConf);
 
+    const capability = await readJson('src-tauri/capabilities/default.json');
+    const currentPermissions = Array.isArray(capability.permissions) ? capability.permissions : [];
+    const nextPermissions = currentPermissions.filter((perm) => {
+      if (!enableUpdater && perm === 'updater:default') return false;
+      if (!enableAutostart && perm === 'autostart:default') return false;
+      return true;
+    });
+    if (enableUpdater && !nextPermissions.includes('updater:default')) {
+      nextPermissions.push('updater:default');
+    }
+    if (enableAutostart && !nextPermissions.includes('autostart:default')) {
+      nextPermissions.push('autostart:default');
+    }
+    capability.permissions = nextPermissions;
+    await writeJson('src-tauri/capabilities/default.json', capability);
+
+    const defaultSettings = await readJson('src-tauri/src/app/default/settings.json');
+    defaultSettings.allowAutoStartUp = enableAutostart ? !!defaultSettings.allowAutoStartUp : false;
+    await writeJson('src-tauri/src/app/default/settings.json', defaultSettings);
+
     const settingsSchema = await readJson('src/settings/settings.schema.json');
     settingsSchema.$id = `${bundleId}.settings.schema.v1`;
     settingsSchema.title = `${appName} Settings Schema`;
