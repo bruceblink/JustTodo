@@ -2,6 +2,23 @@
 
 目标：把当前项目升级为“可复制、可维护、可发布”的完整 Tauri 2.0 脚手架。
 
+## 当前进度（2026-04-06）
+
+1. P0-1 配置与状态统一：已完成
+- 已迁移到 `tauri-plugin-store`
+- 已引入 `settings.schema.json` 与迁移逻辑
+
+2. P0-2 元数据与许可证统一：已完成
+- 已统一版本到 `0.1.0`
+- 已统一许可证为 `AGPL-3.0-or-later`
+
+3. P0-3 权限与安全基线：已完成（第一版）
+- 已产出 `docs/PERMISSIONS_AUDIT.md`
+
+4. P0-4 多平台最小可用验证：进行中
+- 已在 CI 增加前端跨平台冒烟（Windows/macOS/Linux）
+- Rust `cargo check` 当前先在 Windows 运行
+
 ## 里程碑概览
 
 1. M1（1-2 周）：工程稳定化

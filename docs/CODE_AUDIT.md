@@ -28,17 +28,17 @@
 
 ## 高优先级待办（P0）
 
-1. 统一设置存储层
-- 现状：`localStorage` + `src-tauri/src/app/default/settings.json` 混用。
-- 建议：统一到 `tauri-plugin-store`，并定义设置 schema + 默认值迁移策略。
+1. 统一设置存储层（已完成）
+- 已迁移至 `tauri-plugin-store`
+- 已补 `settings.schema.json` 与迁移逻辑
 
-2. 统一许可证与元数据
-- 现状：`package.json` 为 `GNU GPLv3`，`Cargo.toml(workspace)` 为 `MIT`。
-- 风险：对外分发时合规风险高。
+2. 统一许可证与元数据（已完成）
+- 已统一许可证为 `AGPL-3.0-or-later`
+- 已统一版本为 `0.1.0`
 
-3. 最小权限与能力清单审计
-- 现状：已有 capability，但缺少权限说明与安全边界文档。
-- 建议：给出每个插件权限使用场景与最小授权原则。
+3. 最小权限与能力清单审计（已完成第一版）
+- 已新增 `docs/PERMISSIONS_AUDIT.md`
+- 后续按功能扩展持续更新
 
 ## 中优先级待办（P1）
 
@@ -63,4 +63,10 @@
 
 ## 验证说明
 
-本次未执行完整 `pnpm build/test`，因为当前环境缺少 Node 依赖安装（`tsc`/`vitest` 命令不可用）。Rust 侧 `cargo check` 通过。
+本轮已执行并通过：
+
+- `pnpm lint`
+- `pnpm -s tsc --noEmit`
+- `pnpm test -- --run`
+- `pnpm build`
+- `cargo check --manifest-path src-tauri/Cargo.toml`

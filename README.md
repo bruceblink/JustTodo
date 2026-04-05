@@ -74,7 +74,8 @@ pnpm tauri build
 │  └─ tauri.conf.json        # Tauri 配置
 └─ docs/
    ├─ CODE_AUDIT.md          # 审查报告
-   └─ DEVELOPMENT_PLAN.md    # 开发计划
+   ├─ DEVELOPMENT_PLAN.md    # 开发计划
+   └─ PERMISSIONS_AUDIT.md   # 权限审计
 ```
 
 ## 自动更新配置说明
@@ -94,11 +95,10 @@ pnpm tauri build
 
 核心缺口：
 
-- 设置持久化目前混用 `localStorage` 与默认 JSON，缺少统一配置层
-- 缺少 CI/CD（检查、测试、打包、发布、自动更新产物）
+- 自动更新发布流水线（release、签名、`latest.json`）仍需打通
 - 缺少 E2E 与 Rust 集成测试
 - 缺少模板化生成功能（项目名、包名、标识符、更新源一键替换）
 
 ## 许可证
 
-当前仓库存在许可证信息不一致（`package.json` 为 GPLv3，Cargo workspace 为 MIT），请先统一再对外发布模板。
+`AGPL-3.0-or-later`
