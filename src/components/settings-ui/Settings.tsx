@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Select } from '@mantine/core';
 import { IconLanguage } from '@tabler/icons-react';
 import languages from '@/locale/languages.ts';
@@ -6,6 +6,7 @@ import { handleSettingChange } from '@utils/handleSettingChange.ts';
 import { DispatchType } from '@/types/IEvents.ts';
 import { useTranslation } from 'react-i18next';
 import { useSettingStore } from '@/hooks/useSettingStore.tsx';
+import { isEnabled } from '@tauri-apps/plugin-autostart';
 import SettingSwitch from './SettingSwitch.tsx';
 
 interface ISettingsContent {
@@ -18,7 +19,28 @@ interface ISettingsContent {
 
 function Settings() {
   const { t, i18n } = useTranslation();
-  const { allowAutoStartUp } = useSettingStore();
+  const { allowAutoStartUp, setAllowAutoStartUp } = useSettingStore();
+
+  useEffect(() => {
+    let active = true;
+
+    (async () => {
+      try {
+        const enabled = await isEnabled();
+        if (active) {
+          setAllowAutoStartUp(enabled);
+        }
+      } catch {
+        if (active) {
+          setAllowAutoStartUp(false);
+        }
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [setAllowAutoStartUp]);
 
   const settingSwitches: ISettingsContent[] = [
     {

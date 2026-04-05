@@ -1,12 +1,12 @@
 import { memo } from 'react';
-import { Flex } from '@mantine/core';
+import { Flex, Text } from '@mantine/core';
 
-function About() {
+function Home() {
   return (
     <Flex align={'center'} justify={'center'} direction={'column'} gap={'md'}>
-      "这是Home页面"
+      <Text c="dimmed">This is the Home page.</Text>
     </Flex>
   );
 }
 
-export default memo(About);
+export default memo(Home);

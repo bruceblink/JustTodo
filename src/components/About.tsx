@@ -9,6 +9,7 @@ import { REPOSITORY_URL, SPONSORING_URL } from '@/lib/author';
 
 function About() {
   const [appVersion, setAppVersion] = useState('.....');
+  const [updaterOpened, setUpdaterOpened] = useState(false);
   const { t } = useTranslation();
 
   const { update, checking, hasUpdate, checkForUpdate, installUpdate } = useUpdater();
@@ -16,6 +17,11 @@ function About() {
   useEffect(() => {
     void getVersion().then(setAppVersion);
   }, []);
+
+  const handleCheckForUpdates = async () => {
+    const result = await checkForUpdate();
+    setUpdaterOpened(!!result);
+  };
 
   const titleAndLinks = [
     {
@@ -56,7 +62,7 @@ function About() {
         </Anchor>
       </Text>
 
-      <Button variant="outline" loading={checking} onClick={checkForUpdate}>
+      <Button variant="outline" loading={checking} onClick={handleCheckForUpdates}>
         {t('Check for updates')}
       </Button>
 
@@ -71,9 +77,9 @@ function About() {
 
       {hasUpdate && update && (
         <UpdaterModal
-          opened={hasUpdate}
+          opened={updaterOpened}
           update={update}
-          onClose={() => {}}
+          onClose={() => setUpdaterOpened(false)}
           onInstall={installUpdate}
         />
       )}

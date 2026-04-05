@@ -3,7 +3,9 @@ use tauri::{Manager, WebviewWindow};
 use tauri_plugin_autostart::MacosLauncher;
 use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 use tauri_plugin_log::log;
+#[cfg(target_os = "windows")]
 use windows::Win32::Foundation::HWND;
+#[cfg(target_os = "windows")]
 use windows::Win32::UI::WindowsAndMessaging::{BringWindowToTop, SetForegroundWindow, SetWindowPos, ShowWindow, HWND_NOTOPMOST, HWND_TOPMOST, SWP_NOMOVE, SWP_NOSIZE, SWP_SHOWWINDOW, SW_RESTORE, SW_SHOW};
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -36,7 +38,14 @@ pub fn run() {
         ))
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_log::Builder::default().build())
-        .setup(|_app| {
+        .setup(|app| {
+            if std::env::args().any(|arg| arg == AUTOSTART_HIDDEN_ARG) {
+                if let Some(window) = app.get_webview_window("main") {
+                    if let Err(err) = window.hide() {
+                        log::warn!("failed to hide main window for autostart: {err}");
+                    }
+                }
+            }
             log::info!("App setup completed");
             Ok(())
         })
@@ -45,6 +54,7 @@ pub fn run() {
         .expect("error while running tauri application");
 }
 
+#[cfg(target_os = "windows")]
 fn surface_main_window(window: &WebviewWindow) -> Result<(), String> {
     let window_for_handle = window.clone();
     let (tx, rx) = mpsc::channel();
@@ -96,4 +106,18 @@ fn surface_main_window(window: &WebviewWindow) -> Result<(), String> {
         .map_err(|err| err.to_string())?;
 
     rx.recv().map_err(|_| "failed to surface window on main thread".to_string())?
+}
+
+#[cfg(not(target_os = "windows"))]
+fn surface_main_window(window: &WebviewWindow) -> Result<(), String> {
+    if let Err(err) = window.unminimize() {
+        log::warn!("Failed to unminimize window: {err}");
+    }
+    if let Err(err) = window.show() {
+        log::warn!("Failed to show window: {err}");
+    }
+    if let Err(err) = window.set_focus() {
+        log::warn!("Failed to focus window: {err}");
+    }
+    Ok(())
 }
