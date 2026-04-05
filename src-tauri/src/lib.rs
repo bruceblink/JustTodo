@@ -36,6 +36,7 @@ pub fn run() {
             MacosLauncher::LaunchAgent,
             Some(vec![AUTOSTART_HIDDEN_ARG]), /* arbitrary number of args to pass to your app */
         ))
+        .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_log::Builder::default().build())
         .setup(|app| {
