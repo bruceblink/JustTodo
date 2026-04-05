@@ -64,8 +64,11 @@ pnpm tauri build
 .
 ├─ src/                      # React 前端
 │  ├─ components/            # 页面与组件
+│  ├─ features/              # 按业务模块组织
 │  ├─ hooks/                 # 业务 hooks（设置、更新等）
 │  ├─ locale/                # i18n 文案
+│  ├─ platform/              # 平台层封装（Tauri/API）
+│  ├─ shared/                # 通用复用层
 │  ├─ types/                 # 类型定义
 │  └─ utils/                 # 工具方法
 ├─ src-tauri/
@@ -85,6 +88,27 @@ pnpm tauri build
 - 更新元数据地址在 `src-tauri/tauri.conf.json > plugins.updater.endpoints`
 - 需要正确配置公钥 `plugins.updater.pubkey`
 - 发布时需生成并上传更新工件（包含 `latest.json`）
+
+## 模板初始化
+
+可使用下面命令把当前模板改为你的项目信息：
+
+```bash
+pnpm init:template -- \
+  --app-name "MyDesktopApp" \
+  --package-name "my-desktop-app" \
+  --bundle-id "com.example.mydesktopapp" \
+  --author-name "Your Name" \
+  --author-email "you@example.com" \
+  --author-url "https://example.com" \
+  --repository-url "https://github.com/your-org/my-desktop-app" \
+  --sponsoring-url "https://buymeacoffee.com/yourname"
+```
+
+说明：
+
+- `--updater-endpoint` 可选；未提供时自动使用 `${repository-url}/releases/latest/download/latest.json`
+- 可先加 `--dry-run` 查看将应用的参数，不写文件
 
 ## 作为“完整脚手架”还需要补齐什么
 

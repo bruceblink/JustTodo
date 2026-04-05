@@ -13,6 +13,7 @@
     "url": "https://github.com/bruceblink/JustTodo"
   },
   "scripts": {
+    "init:template": "node scripts/init-template.mjs",
     "dev": "vite",
     "build": "tsc && vite build",
     "test": "vitest",
