@@ -1,19 +1,30 @@
 import { create } from 'zustand';
 import { ColorScheme, ISettingStoreState } from '../types/ISetting.ts';
-import defaultSettings from '../../src-tauri/src/app/default/settings.json';
+import { defaultAppSettings } from '@/settings/settingsSchema.ts';
+import { loadAppSettings } from '@/settings/settingsPersistence.ts';
 
 // initialize settings-ui
 export const useSettingStore = create<ISettingStoreState>()((set) => ({
-  language: localStorage.getItem('language') ?? defaultSettings.language,
+  hydrated: false,
+  language: defaultAppSettings.language,
   setLanguage: (newLanguage) => {
     set({ language: newLanguage });
   },
-  theme: (localStorage.getItem('theme') as ColorScheme) ?? defaultSettings.theme,
+  theme: defaultAppSettings.theme as ColorScheme,
   setTheme: (newTheme) => {
     set({ theme: newTheme });
   },
-  allowAutoStartUp: defaultSettings.allowAutoStartUp ?? false,
+  allowAutoStartUp: defaultAppSettings.allowAutoStartUp,
   setAllowAutoStartUp: (newBoolean) => {
     set({ allowAutoStartUp: newBoolean });
+  },
+  initSettings: async () => {
+    const settings = await loadAppSettings();
+    set({
+      hydrated: true,
+      language: settings.language,
+      theme: settings.theme,
+      allowAutoStartUp: settings.allowAutoStartUp,
+    });
   },
 }));

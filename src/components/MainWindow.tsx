@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import {
   AppShell,
   ActionIcon,
@@ -39,6 +39,10 @@ function MainWindow() {
     setColorScheme(newTheme);
     handleSettingChange(DispatchType.ChangeAppTheme, newTheme);
   };
+
+  useEffect(() => {
+    setColorScheme(colorScheme);
+  }, [colorScheme, setColorScheme]);
 
   /** Activity Bar 注册表 */
   const tabs: SideNavBarTabs[] = useMemo(

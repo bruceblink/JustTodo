@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "top.likanug.justtodo.settings.schema.v1",
+  "title": "JustTodo Settings Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "language", "theme", "allowAutoStartUp"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1
+    },
+    "language": {
+      "type": "string",
+      "minLength": 1
+    },
+    "theme": {
+      "type": "string",
+      "enum": ["light", "dark"]
+    },
+    "allowAutoStartUp": {
+      "type": "boolean"
+    }
+  }
+}

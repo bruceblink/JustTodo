@@ -28,9 +28,11 @@ export interface ISettingStoreVariables {
 }
 
 export interface ISettingStoreState extends ISettingStoreVariables {
+  hydrated: boolean;
   setLanguage: (newLanguage: string) => void;
   setTheme: (newTheme: ColorScheme) => void;
   setAllowAutoStartUp: (newBoolean: boolean) => void;
+  initSettings: () => Promise<void>;
 }
 
 export interface ISettingsContent {

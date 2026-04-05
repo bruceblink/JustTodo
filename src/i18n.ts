@@ -4,11 +4,12 @@ import English from './locale/en/translation.json';
 import Khmer from './locale/kh/translation.json';
 import zhCNTranslation from './locale/zh-CN/translation.json';
 import zhTWTranslation from './locale/zh-TW/translation.json';
+import { defaultAppSettings } from '@/settings/settingsSchema.ts';
 
-const defaultLanguage = 'zh-CN';
+const defaultLanguage = defaultAppSettings.language;
 
 void i18next.use(initReactI18next).init({
-  lng: localStorage.getItem('language') || defaultLanguage,
+  lng: defaultLanguage,
   fallbackLng: defaultLanguage,
   resources: {
     en: {
