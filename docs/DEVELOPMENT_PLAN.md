@@ -31,6 +31,10 @@
 - 已增加 `scaffold.features`（`updater`/`autostart`）
 - 已实现前端按开关隐藏/禁用对应能力
 
+8. M3-2 更新发布链路：已完成第一版
+- 已新增 `.github/workflows/release.yml`
+- 已新增 `docs/RELEASE_PROCESS.md`
+
 ## 里程碑概览
 
 1. M1（1-2 周）：工程稳定化

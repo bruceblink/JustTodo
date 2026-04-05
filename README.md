@@ -78,7 +78,8 @@ pnpm tauri build
 └─ docs/
    ├─ CODE_AUDIT.md          # 审查报告
    ├─ DEVELOPMENT_PLAN.md    # 开发计划
-   └─ PERMISSIONS_AUDIT.md   # 权限审计
+   ├─ PERMISSIONS_AUDIT.md   # 权限审计
+   └─ RELEASE_PROCESS.md     # 发布流程
 ```
 
 ## 自动更新配置说明
