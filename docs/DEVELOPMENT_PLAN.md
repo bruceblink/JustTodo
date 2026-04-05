@@ -19,6 +19,14 @@
 - 已在 CI 增加前端跨平台冒烟（Windows/macOS/Linux）
 - Rust `cargo check` 当前先在 Windows 运行
 
+5. P1-1 初始化模板系统：进行中
+- 已新增 `scripts/init-template.mjs`
+- 已支持一键替换 app/package/bundle/author/repository/updater endpoint
+
+6. P1-2 模块化目录约定：已完成基础骨架
+- 已新增 `src/features` / `src/shared` / `src/platform`
+- 已补充路径别名 `@features/*`、`@shared/*`、`@platform/*`
+
 ## 里程碑概览
 
 1. M1（1-2 周）：工程稳定化
