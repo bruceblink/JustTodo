@@ -66,11 +66,11 @@ if (versionArg === 'patch' || versionArg === 'minor' || versionArg === 'major') 
   newVersion = versionArg;
 }
 
-tauriPackageJson.version = newVersion;
-fs.writeFileSync(tauriPackageJsonPath, JSON.stringify(tauriPackageJson, null, 2) + '\n');
-
 try {
   ensureCleanTree();
+
+  tauriPackageJson.version = newVersion;
+  fs.writeFileSync(tauriPackageJsonPath, JSON.stringify(tauriPackageJson, null, 2) + '\n');
 
   run(`node "${syncVersionScript}"`);
   run(`node "${validateVersionScript}"`);
