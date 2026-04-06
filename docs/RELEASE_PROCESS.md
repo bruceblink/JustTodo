@@ -61,7 +61,10 @@ git push origin v0.1.1
 pnpm release patch
 pnpm release minor
 pnpm release version 0.2.0
+pnpm release:hotfix
 ```
+
+`release:hotfix` 会跳过单元测试，仅执行 `lint` / `typecheck` / `cargo check`，用于紧急修复发布。
 
 ## 回滚建议
 

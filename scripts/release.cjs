@@ -16,6 +16,7 @@ if (!currentVersion) {
   process.exit(1);
 }
 
+const hotfixMode = process.argv.includes('--hotfix');
 let versionArg = process.argv[2];
 if (versionArg === 'version') {
   versionArg = process.argv[3];
@@ -34,6 +35,13 @@ function run(command) {
 
 function readStdout(command) {
   return execSync(command, { encoding: 'utf8' }).trim();
+}
+
+function tagExists(tagName) {
+  const local = readStdout(`git tag --list "${tagName}"`);
+  if (local) return true;
+  const remote = readStdout(`git ls-remote --tags origin ${tagName}`);
+  return !!remote;
 }
 
 function ensureCleanTree() {
@@ -78,17 +86,33 @@ try {
   // Local quality gate before publishing.
   run('pnpm lint');
   run('pnpm -s tsc --noEmit');
-  run('pnpm test -- --run');
+  if (!hotfixMode) {
+    run('pnpm test -- --run');
+  }
   run('cargo check --manifest-path src-tauri/Cargo.toml');
 
   run('git add package.json src-tauri/package.json src-tauri/tauri.conf.json Cargo.toml Cargo.lock src-tauri/Cargo.lock');
-  run(`git -c commit.gpgsign=false commit -m "chore(release): v${newVersion}"`);
-  run(`git tag v${newVersion}`);
+  const hasStagedChanges = execSync('git diff --cached --quiet; echo $LASTEXITCODE', {
+    encoding: 'utf8',
+    shell: 'powershell',
+  }).trim() !== '0';
+  if (hasStagedChanges) {
+    run(`git -c commit.gpgsign=false commit -m "chore(release): v${newVersion}"`);
+  } else {
+    console.log(`No version file changes detected for v${newVersion}, skip version commit.`);
+  }
+
+  const tagName = `v${newVersion}`;
+  if (tagExists(tagName)) {
+    console.error(`Error: tag ${tagName} already exists locally or on origin.`);
+    process.exit(1);
+  }
+  run(`git tag ${tagName}`);
 
   run('git push origin HEAD');
-  run(`git push origin v${newVersion}`);
+  run(`git push origin ${tagName}`);
 
-  console.log(`Release prepared and pushed: v${newVersion}`);
+  console.log(`Release prepared and pushed: ${tagName}`);
   console.log('GitHub Actions publish workflow should now run automatically.');
 } catch (error) {
   console.error('Release preparation failed');
