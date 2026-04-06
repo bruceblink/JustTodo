@@ -8,7 +8,7 @@
 
 ## 前置条件
 
-1. 在仓库 Secrets 配置：
+1. 在仓库 Secrets 配置（仅当 `package.json.scaffold.features.updater=true` 时必须）：
 - `TAURI_SIGNING_PRIVATE_KEY`
 - `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`
 
@@ -35,7 +35,9 @@ git push origin v0.1.1
 
 - 在 Windows / Linux / macOS 三个平台构建
 - 使用 `tauri-apps/tauri-action@v0.5` 发布 Draft Release
-- 自动上传构建产物与 updater 相关文件
+- 预检版本一致性（`package.json` / `src-tauri/package.json` / `tauri.conf.json` / `Cargo.toml`）
+- 根据 `package.json.scaffold.features.updater` 自动决定是否生成 updater 工件
+- 当 updater 启用时，自动校验签名 secrets 是否存在
 
 ## 发布检查清单
 

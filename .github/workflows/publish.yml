@@ -35,6 +35,7 @@ jobs:
       version: ${{ steps.meta.outputs.version }}
       release_body: ${{ steps.drafter.outputs.body != '' && steps.drafter.outputs.body || steps.notes.outputs.body }}
       draft: ${{ steps.draft.outputs.value }}
+      updater_enabled: ${{ steps.features.outputs.updater_enabled }}
 
     steps:
       - uses: actions/checkout@v4
@@ -104,6 +105,40 @@ jobs:
             echo "value=${{ inputs.draft }}" >> "$GITHUB_OUTPUT"
           else
             echo "value=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Resolve feature flags
+        id: features
+        shell: bash
+        run: |
+          node - <<'EOF'
+          const fs = require("fs");
+          const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+          const updaterEnabled = pkg?.scaffold?.features?.updater !== false;
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `updater_enabled=${updaterEnabled}\n`);
+          EOF
+
+      - name: Validate updater signing secrets
+        if: steps.features.outputs.updater_enabled == 'true'
+        shell: bash
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          missing=0
+
+          if [ -z "$TAURI_SIGNING_PRIVATE_KEY" ]; then
+            echo "::error::Missing secret TAURI_SIGNING_PRIVATE_KEY while updater is enabled."
+            missing=1
+          fi
+
+          if [ -z "$TAURI_SIGNING_PRIVATE_KEY_PASSWORD" ]; then
+            echo "::error::Missing secret TAURI_SIGNING_PRIVATE_KEY_PASSWORD while updater is enabled."
+            missing=1
+          fi
+
+          if [ "$missing" -ne 0 ]; then
+            exit 1
           fi
 
       - name: Generate release notes with Release Drafter
@@ -234,5 +269,5 @@ jobs:
           releaseName: ${{ github.event.repository.name }} ${{ needs.preflight.outputs.version }}
           releaseBody: ${{ needs.preflight.outputs.release_body }}
           releaseDraft: ${{ needs.preflight.outputs.draft }}
-          includeUpdaterJson: true
+          includeUpdaterJson: ${{ needs.preflight.outputs.updater_enabled }}
           args: ${{ matrix.args }}

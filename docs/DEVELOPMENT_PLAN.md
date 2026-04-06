@@ -35,6 +35,11 @@
 - 已新增 `.github/workflows/publish.yml`
 - 已新增 `docs/RELEASE_PROCESS.md`
 
+9. P0 收尾：已完成
+- 发布流程已支持 updater 开关联动（读取 `package.json.scaffold.features.updater`）
+- 发布前已增加签名 secrets 预检（仅 updater 开启时强制）
+- 文档状态已同步更新
+
 ## 里程碑概览
 
 1. M1（1-2 周）：工程稳定化
