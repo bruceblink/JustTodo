@@ -20,6 +20,9 @@
   },
   "scripts": {
     "init:template": "node scripts/init-template.mjs",
+    "sync-version": "node scripts/sync-version.cjs",
+    "validate-version": "node scripts/validate-version.cjs",
+    "release": "node scripts/release.cjs",
     "dev": "vite",
     "build": "tsc && vite build",
     "test": "vitest",

@@ -90,6 +90,14 @@ pnpm tauri build
 - 需要正确配置公钥 `plugins.updater.pubkey`
 - 发布时需生成并上传更新工件（包含 `latest.json`）
 
+## 发布流水线
+
+当前脚手架已集成完整发布流程（参考 `alter-sendme`）：
+
+- Workflow：`.github/workflows/publish.yml`
+- Release notes：`.github/release-drafter.yml`
+- 版本工具脚本：`scripts/sync-version.cjs`、`scripts/validate-version.cjs`、`scripts/release.cjs`
+
 ## 模板初始化
 
 可使用下面命令把当前模板改为你的项目信息：

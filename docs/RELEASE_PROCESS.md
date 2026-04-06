@@ -27,14 +27,14 @@ git push origin v0.1.1
 ```
 
 2. 手动触发：
-- GitHub Actions 页面选择 `Release` 工作流 -> `Run workflow`
+- GitHub Actions 页面选择 `publish` 工作流 -> `Run workflow`
 
 ## 工作流行为
 
-文件：`.github/workflows/release.yml`
+文件：`.github/workflows/publish.yml`
 
 - 在 Windows / Linux / macOS 三个平台构建
-- 使用 `tauri-apps/tauri-action@v0` 发布 Draft Release
+- 使用 `tauri-apps/tauri-action@v0.5` 发布 Draft Release
 - 自动上传构建产物与 updater 相关文件
 
 ## 发布检查清单

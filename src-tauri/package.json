@@ -1,0 +1,9 @@
+{
+  "name": "justtodo-desktop",
+  "version": "0.1.0",
+  "scripts": {
+    "sync-version": "node ../scripts/sync-version.cjs",
+    "validate-version": "node ../scripts/validate-version.cjs",
+    "release": "node ../scripts/release.cjs"
+  }
+}

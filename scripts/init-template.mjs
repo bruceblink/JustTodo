@@ -136,6 +136,10 @@ async function main() {
     };
     await writeJson('package.json', packageJson);
 
+    const tauriPackageJson = await readJson('src-tauri/package.json');
+    tauriPackageJson.name = `${packageName}-desktop`;
+    await writeJson('src-tauri/package.json', tauriPackageJson);
+
     const tauriConf = await readJson('src-tauri/tauri.conf.json');
     tauriConf.productName = appName;
     tauriConf.identifier = bundleId;
