@@ -14,7 +14,7 @@
   },
   "scaffold": {
     "features": {
-      "updater": true,
+      "updater": false,
       "autostart": true
     }
   },
