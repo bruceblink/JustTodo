@@ -82,7 +82,7 @@ try {
   run('cargo check --manifest-path src-tauri/Cargo.toml');
 
   run('git add package.json src-tauri/package.json src-tauri/tauri.conf.json Cargo.toml');
-  run(`git commit -m "chore(release): v${newVersion}"`);
+  run(`git -c commit.gpgsign=false commit -m "chore(release): v${newVersion}"`);
   run(`git tag v${newVersion}`);
 
   run('git push origin HEAD');
