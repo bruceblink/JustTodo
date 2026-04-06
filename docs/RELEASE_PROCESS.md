@@ -34,7 +34,7 @@ git push origin v0.1.1
 文件：`.github/workflows/publish.yml`
 
 - 在 Windows / Linux / macOS 三个平台构建
-- 使用 `tauri-apps/tauri-action@v0.5` 发布 Draft Release
+- 使用 `tauri-apps/tauri-action@v0.5` 发布 GitHub Release（tag 推送默认非 Draft）
 - 预检版本一致性（`package.json` / `src-tauri/package.json` / `tauri.conf.json` / `Cargo.toml`）
 - 根据 `package.json.scaffold.features.updater` 自动决定是否生成 updater 工件
 - 当 updater 启用时，自动校验签名 secrets 是否存在
@@ -45,6 +45,23 @@ git push origin v0.1.1
 2. Release 附件中包含 updater 工件（含 `latest.json`）
 3. 应用内点击“检查更新”可识别新版本
 4. 验签通过并可完成更新安装
+
+## 本地一键发布
+
+可在本地执行以下命令自动完成：
+- 版本号更新
+- 版本一致性校验
+- 本地质量门禁（lint/typecheck/test/cargo check）
+- 提交版本 commit
+- 打 tag 并推送到 GitHub（触发 `publish` workflow）
+
+示例：
+
+```bash
+pnpm release patch
+pnpm release minor
+pnpm release version 0.2.0
+```
 
 ## 回滚建议
 

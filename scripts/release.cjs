@@ -16,12 +16,32 @@ if (!currentVersion) {
   process.exit(1);
 }
 
-const versionArg = process.argv[2];
+let versionArg = process.argv[2];
+if (versionArg === 'version') {
+  versionArg = process.argv[3];
+}
+
 if (!versionArg) {
   console.error(
-    'Error: Please specify version bump type (patch/minor/major) or exact version (for example 0.2.0)',
+    'Error: Please specify release target. Example: pnpm release patch OR pnpm release version 0.2.0',
   );
   process.exit(1);
+}
+
+function run(command) {
+  execSync(command, { stdio: 'inherit' });
+}
+
+function readStdout(command) {
+  return execSync(command, { encoding: 'utf8' }).trim();
+}
+
+function ensureCleanTree() {
+  const status = readStdout('git status --porcelain');
+  if (status) {
+    console.error('Error: Git worktree is not clean. Please commit or stash changes first.');
+    process.exit(1);
+  }
 }
 
 let newVersion;
@@ -50,9 +70,26 @@ tauriPackageJson.version = newVersion;
 fs.writeFileSync(tauriPackageJsonPath, JSON.stringify(tauriPackageJson, null, 2) + '\n');
 
 try {
-  execSync(`node "${syncVersionScript}"`, { stdio: 'inherit' });
-  execSync(`node "${validateVersionScript}"`, { stdio: 'inherit' });
-  execSync('git status --short', { stdio: 'inherit' });
+  ensureCleanTree();
+
+  run(`node "${syncVersionScript}"`);
+  run(`node "${validateVersionScript}"`);
+
+  // Local quality gate before publishing.
+  run('pnpm lint');
+  run('pnpm -s tsc --noEmit');
+  run('pnpm test -- --run');
+  run('cargo check --manifest-path src-tauri/Cargo.toml');
+
+  run('git add package.json src-tauri/package.json src-tauri/tauri.conf.json Cargo.toml');
+  run(`git commit -m "chore(release): v${newVersion}"`);
+  run(`git tag v${newVersion}`);
+
+  run('git push origin HEAD');
+  run(`git push origin v${newVersion}`);
+
+  console.log(`Release prepared and pushed: v${newVersion}`);
+  console.log('GitHub Actions publish workflow should now run automatically.');
 } catch (error) {
   console.error('Release preparation failed');
   process.exit(1);

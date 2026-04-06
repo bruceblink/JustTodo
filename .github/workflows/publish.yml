@@ -104,7 +104,7 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "value=${{ inputs.draft }}" >> "$GITHUB_OUTPUT"
           else
-            echo "value=true" >> "$GITHUB_OUTPUT"
+            echo "value=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Resolve feature flags
