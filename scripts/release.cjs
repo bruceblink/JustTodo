@@ -81,7 +81,7 @@ try {
   run('pnpm test -- --run');
   run('cargo check --manifest-path src-tauri/Cargo.toml');
 
-  run('git add package.json src-tauri/package.json src-tauri/tauri.conf.json Cargo.toml');
+  run('git add package.json src-tauri/package.json src-tauri/tauri.conf.json Cargo.toml Cargo.lock src-tauri/Cargo.lock');
   run(`git -c commit.gpgsign=false commit -m "chore(release): v${newVersion}"`);
   run(`git tag v${newVersion}`);
 
