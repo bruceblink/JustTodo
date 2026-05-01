@@ -3,6 +3,7 @@ import {
   ActionIcon,
   Badge,
   Box,
+  Button,
   Card,
   Grid,
   Group,
@@ -11,7 +12,13 @@ import {
   Text,
   ThemeIcon,
 } from '@mantine/core';
-import { IconActivity, IconDots, IconGitBranch, IconBrandGithub } from '@tabler/icons-react';
+import {
+  IconActivity,
+  IconDots,
+  IconGitBranch,
+  IconBrandGithub,
+  IconExternalLink,
+} from '@tabler/icons-react';
 
 const usageItems = [
   { label: 'Edge Requests', value: '1.6K / 1M', progress: 12 },
@@ -85,58 +92,85 @@ function Home() {
 
       <Grid gutter="md">
         <Grid.Col span={{ base: 12, xl: 4 }}>
-          <Card
-            bg="dark.8"
-            withBorder
-            radius="md"
-            p="md"
-            style={(theme) => ({ borderColor: theme.colors.dark[4] })}
-          >
-            <Stack gap="sm">
-              <Group justify="space-between">
-                <Text fw={600} fz="sm">
-                  Usage
-                </Text>
-                <Badge color="red" variant="light" size="sm">
-                  Paused
-                </Badge>
-              </Group>
-              {usageItems.map((item) => (
-                <Box key={item.label}>
-                  <Group justify="space-between" mb={5}>
-                    <Text fz="xs" c="gray.1">
-                      {item.label}
-                    </Text>
-                    <Text fz="xs" c="dimmed">
-                      {item.value}
-                    </Text>
-                  </Group>
-                  <Progress value={item.progress} size={5} color="gray" radius="xl" />
-                </Box>
-              ))}
-            </Stack>
-          </Card>
+          <Stack gap="md">
+            <Card
+              bg="dark.8"
+              withBorder
+              radius="md"
+              p="md"
+              style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+            >
+              <Stack gap="sm">
+                <Group justify="space-between">
+                  <Text fw={600} fz="sm">
+                    Usage
+                  </Text>
+                  <Badge color="red" variant="light" size="sm">
+                    Paused
+                  </Badge>
+                </Group>
+                {usageItems.map((item) => (
+                  <Box key={item.label}>
+                    <Group justify="space-between" mb={5}>
+                      <Text fz="xs" c="gray.1">
+                        {item.label}
+                      </Text>
+                      <Text fz="xs" c="dimmed">
+                        {item.value}
+                      </Text>
+                    </Group>
+                    <Progress value={item.progress} size={5} color="gray" radius="xl" />
+                  </Box>
+                ))}
+                <Button variant="outline" size="xs" mt="xs">
+                  Upgrade
+                </Button>
+              </Stack>
+            </Card>
 
-          <Card
-            mt="md"
-            bg="dark.8"
-            withBorder
-            radius="md"
-            p="md"
-            style={(theme) => ({ borderColor: theme.colors.dark[4] })}
-          >
-            <Stack gap="xs" align="center" py="md">
-              <ThemeIcon size={34} radius="xl" variant="light" color="gray">
-                <IconActivity size="0.95rem" />
-              </ThemeIcon>
-              <Text fw={600} fz="sm">
-                Get alerted for anomalies
-              </Text>
-              <Text c="dimmed" fz="xs" ta="center">
-                Automatically monitor your projects and get notifications.
-              </Text>
-            </Stack>
-          </Card>
+            <Card
+              bg="dark.8"
+              withBorder
+              radius="md"
+              p="md"
+              style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+            >
+              <Stack gap="xs" align="center" py="md">
+                <ThemeIcon size={34} radius="xl" variant="light" color="gray">
+                  <IconActivity size="0.95rem" />
+                </ThemeIcon>
+                <Text fw={600} fz="sm">
+                  Get alerted for anomalies
+                </Text>
+                <Text c="dimmed" fz="xs" ta="center">
+                  Automatically monitor your projects and get notifications.
+                </Text>
+                <Button variant="outline" size="xs" mt="xs">
+                  Upgrade to Pro
+                </Button>
+              </Stack>
+            </Card>
+
+            <Card
+              bg="dark.8"
+              withBorder
+              radius="md"
+              p="md"
+              style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+            >
+              <Stack gap="xs" align="center" py="md">
+                <ThemeIcon size={34} radius="xl" variant="light" color="gray">
+                  <IconExternalLink size="0.9rem" />
+                </ThemeIcon>
+                <Text fw={600} fz="sm">
+                  Recent Previews
+                </Text>
+                <Text c="dimmed" fz="xs" ta="center">
+                  Preview deployments you recently opened will appear here.
+                </Text>
+              </Stack>
+            </Card>
+          </Stack>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, xl: 8 }}>
