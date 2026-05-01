@@ -6,13 +6,15 @@ import { ModalsProvider } from '@mantine/modals';
 
 import Loading from './Loading';
 import MainWindow from './components/MainWindow';
-import { ColorSchemeType } from './types/ISetting';
+import { useSettingStore } from './hooks/useSettingStore';
 
 function App() {
+  const { theme } = useSettingStore();
+
   return (
     <Suspense fallback={<Loading />}>
       <MantineProvider
-        defaultColorScheme={ColorSchemeType.Dark}
+        forceColorScheme={theme}
         theme={{
           fontFamily:
             'Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',

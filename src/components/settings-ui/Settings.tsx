@@ -1,5 +1,5 @@
 import React, { memo, useEffect } from 'react';
-import { Card, Select, Stack, Text } from '@mantine/core';
+import { Card, Select, SegmentedControl, Stack, Text } from '@mantine/core';
 import { IconLanguage } from '@tabler/icons-react';
 import languages from '@/locale/languages.ts';
 import { handleSettingChange } from '@utils/handleSettingChange.ts';
@@ -20,7 +20,7 @@ interface ISettingsContent {
 
 function Settings() {
   const { t, i18n } = useTranslation();
-  const { allowAutoStartUp, setAllowAutoStartUp } = useSettingStore();
+  const { allowAutoStartUp, setAllowAutoStartUp, theme } = useSettingStore();
 
   useEffect(() => {
     if (!featureFlags.autostart) {
@@ -60,10 +60,30 @@ function Settings() {
     : [];
 
   return (
-    <Stack gap="md">
-      <Text fw={600} fz="xl">
+    <Stack gap="sm">
+      <Text fw={700} fz="xl">
         {t('Settings')}
       </Text>
+
+      <Card
+        bg="dark.8"
+        withBorder
+        radius="md"
+        p="md"
+        style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+      >
+        <Stack gap="xs">
+          <Text fw={600}>{t('Theme')}</Text>
+          <SegmentedControl
+            value={theme}
+            onChange={(value) => handleSettingChange(DispatchType.ChangeAppTheme, value)}
+            data={[
+              { label: 'Dark', value: 'dark' },
+              { label: 'Light', value: 'light' },
+            ]}
+          />
+        </Stack>
+      </Card>
 
       {settingSwitches.map((setting) => (
         <SettingSwitch {...setting} key={setting.dispatchType} />
@@ -86,6 +106,16 @@ function Settings() {
           maxDropdownHeight={400}
           value={i18n.language}
           onChange={(value) => handleSettingChange(DispatchType.ChangeAppLanguage, value as string)}
+          styles={(theme) => ({
+            input: {
+              backgroundColor: theme.colors.dark[7],
+              borderColor: theme.colors.dark[4],
+            },
+            dropdown: {
+              backgroundColor: theme.colors.dark[8],
+              borderColor: theme.colors.dark[4],
+            },
+          })}
         />
       </Card>
     </Stack>

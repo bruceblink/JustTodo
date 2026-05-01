@@ -18,241 +18,192 @@ import {
   IconGitBranch,
   IconBrandGithub,
   IconExternalLink,
-  IconLayoutGrid,
-  IconList,
-  IconAdjustmentsHorizontal,
+  IconInfoCircle,
+  IconWaveSine,
+  IconAlertCircle,
 } from '@tabler/icons-react';
-
-const usageItems = [
-  { label: 'Edge Requests', value: '1.6K / 1M', progress: 12 },
-  { label: 'Fast Data Transfer', value: '2.23 MB / 100 GB', progress: 3 },
-  { label: 'Fast Origin Transfer', value: '0 / 10 GB', progress: 0 },
-  { label: 'Edge Request CPU Duration', value: '0 / 1h', progress: 0 },
-];
-
-const projects = [
-  {
-    name: 'next-tv',
-    domain: 'next-tv-sepia.vercel.app',
-    repo: 'bruceblink/NextTV',
-    commit: 'refactor: simplify landing page and remove extra hero elements',
-    updated: '9/21/25',
-    branch: 'main',
-  },
-  {
-    name: 'notion-next',
-    domain: 'blog.likang.top',
-    repo: 'bruceblink/NotionNext',
-    commit: 'chore: remove unnecessary theme',
-    updated: '8/23/25',
-    branch: 'main',
-  },
-  {
-    name: 'n-gon',
-    domain: 'n-gon-azure.vercel.app',
-    repo: 'bruceblink/n-gon',
-    commit: 'quick bug fix',
-    updated: '12/9/25',
-    branch: 'master',
-  },
-  {
-    name: 'fast-analytics',
-    domain: 'fast-analytics-pearl.vercel.app',
-    repo: 'bruceblink/fast-analytics',
-    commit: 'chore: clean unused import',
-    updated: '12/14/25',
-    branch: 'main',
-  },
-  {
-    name: 'nextjs-dashboard',
-    domain: 'nextjs-dashboard-nine-ashen.vercel.app',
-    repo: 'bruceblink/nextjs-dashboard',
-    commit: 'docs: update readme and default login account',
-    updated: '9/13/25',
-    branch: 'dev',
-  },
-  {
-    name: 'material-kit-react',
-    domain: 'material-kit-react-rose.vercel.app',
-    repo: 'bruceblink/material-kit-react',
-    commit: 'docs: update readme page urls',
-    updated: '9/6/25',
-    branch: 'master',
-  },
-];
+import { projects, usageItems } from './home-data';
 
 function Home() {
   return (
-    <Stack gap="lg">
-      <Group justify="space-between" align="center">
-        <Text fw={600} fz="md" c="gray.1">
-          Overview
-        </Text>
-        <Badge color="gray" variant="light" size="sm">
-          Dark Mode
-        </Badge>
-      </Group>
-
-      <Grid gutter="md" align="stretch">
-        <Grid.Col span={{ base: 12, xl: 4 }}>
-          <Stack gap="md" h="100%">
-            <Card
-              bg="dark.8"
-              withBorder
-              radius="md"
-              p="md"
-              style={(theme) => ({ borderColor: theme.colors.dark[4] })}
-            >
-              <Stack gap="sm">
-                <Group justify="space-between">
-                  <Text fw={600} fz="sm">
-                    Usage
+    <Grid gutter="md" align="stretch">
+      <Grid.Col span={{ base: 12, xl: 4 }}>
+        <Stack gap="md" h="100%">
+          <Card
+            bg="dark.8"
+            withBorder
+            radius="md"
+            p="md"
+            style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+          >
+            <Stack gap="sm">
+              <Group justify="space-between">
+                <Stack gap={2}>
+                  <Group gap={6}>
+                    <Text fw={700} c="red.4">
+                      Paused
+                    </Text>
+                    <IconAlertCircle size="0.9rem" color="var(--mantine-color-red-4)" />
+                  </Group>
+                  <Text c="dimmed" fz="sm">
+                    Upgrade to resume service
                   </Text>
-                  <Badge color="red" variant="light" size="sm">
-                    Paused
-                  </Badge>
-                </Group>
-                {usageItems.map((item) => (
-                  <Box key={item.label}>
-                    <Group justify="space-between" mb={5}>
-                      <Text fz="xs" c="gray.1">
-                        {item.label}
-                      </Text>
-                      <Text fz="xs" c="dimmed">
-                        {item.value}
-                      </Text>
-                    </Group>
-                    <Progress value={item.progress} size={5} color="gray" radius="xl" />
-                  </Box>
-                ))}
-                <Button variant="outline" size="xs" mt="xs">
+                </Stack>
+                <Button size="xs" variant="light" color="gray">
                   Upgrade
                 </Button>
-              </Stack>
-            </Card>
-
-            <Card
-              bg="dark.8"
-              withBorder
-              radius="md"
-              p="md"
-              style={(theme) => ({ borderColor: theme.colors.dark[4] })}
-            >
-              <Stack gap="xs" align="center" py="md">
-                <ThemeIcon size={34} radius="xl" variant="light" color="gray">
-                  <IconActivity size="0.95rem" />
-                </ThemeIcon>
-                <Text fw={600} fz="sm">
-                  Get alerted for anomalies
-                </Text>
-                <Text c="dimmed" fz="xs" ta="center">
-                  Automatically monitor your projects and get notifications.
-                </Text>
-                <Button variant="outline" size="xs" mt="xs">
-                  Upgrade to Pro
-                </Button>
-              </Stack>
-            </Card>
-
-            <Card
-              bg="dark.8"
-              withBorder
-              radius="md"
-              p="md"
-              style={(theme) => ({ borderColor: theme.colors.dark[4], flex: 1 })}
-            >
-              <Stack gap="xs" align="center" justify="center" h="100%" py="md">
-                <ThemeIcon size={34} radius="xl" variant="light" color="gray">
-                  <IconExternalLink size="0.9rem" />
-                </ThemeIcon>
-                <Text fw={600} fz="sm">
-                  Recent Previews
-                </Text>
-                <Text c="dimmed" fz="xs" ta="center">
-                  Preview deployments you recently opened will appear here.
-                </Text>
-              </Stack>
-            </Card>
-          </Stack>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, xl: 8 }}>
-          <Stack gap="sm">
-            <Group justify="space-between" align="center">
-              <Text fw={600} fz="sm">
-                Projects
-              </Text>
-              <Group gap={6}>
-                <ActionIcon variant="subtle" size="sm" color="gray">
-                  <IconAdjustmentsHorizontal size="0.85rem" />
-                </ActionIcon>
-                <ActionIcon variant="subtle" size="sm" color="gray">
-                  <IconLayoutGrid size="0.85rem" />
-                </ActionIcon>
-                <ActionIcon variant="subtle" size="sm" color="gray">
-                  <IconList size="0.85rem" />
-                </ActionIcon>
               </Group>
-            </Group>
 
-            <Grid gutter="md">
-              {projects.map((project) => (
-                <Grid.Col key={project.name} span={{ base: 12, lg: 6 }}>
-                  <Card
-                    bg="dark.8"
-                    withBorder
-                    radius="md"
-                    p="md"
-                    style={(theme) => ({ borderColor: theme.colors.dark[4], height: '100%' })}
-                  >
-                    <Stack gap={8} h="100%">
-                      <Group justify="space-between" align="flex-start" wrap="nowrap">
-                        <Box style={{ minWidth: 0 }}>
-                          <Text fw={600} fz="sm" truncate>
-                            {project.name}
-                          </Text>
-                          <Text c="dimmed" fz="xs" truncate>
-                            {project.domain}
-                          </Text>
-                        </Box>
-                        <ActionIcon variant="subtle" color="gray" size="sm">
-                          <IconDots size="0.9rem" />
-                        </ActionIcon>
-                      </Group>
-
-                      <Group gap={6} wrap="nowrap">
-                        <IconBrandGithub size="0.85rem" />
-                        <Text fz="xs" c="gray.3" truncate>
-                          {project.repo}
-                        </Text>
-                      </Group>
-
-                      <Text fz="xs" c="gray.1" lineClamp={2}>
-                        {project.commit}
+              {usageItems.map((item) => (
+                <Box key={item.label}>
+                  <Group justify="space-between" mb={5}>
+                    <Group gap={6}>
+                      <IconInfoCircle size="0.75rem" />
+                      <Text fz="md" fw={600}>
+                        {item.label}
                       </Text>
-
-                      <Box style={{ marginTop: 'auto' }}>
-                        <Group justify="space-between" mt={2}>
-                          <Text fz="xs" c="dimmed">
-                            {project.updated}
-                          </Text>
-                          <Group gap={4} wrap="nowrap">
-                            <IconGitBranch size="0.8rem" />
-                            <Text fz="xs" c="dimmed">
-                              {project.branch}
-                            </Text>
-                          </Group>
-                        </Group>
-                      </Box>
-                    </Stack>
-                  </Card>
-                </Grid.Col>
+                    </Group>
+                    <Text fz="md" c="gray.1">
+                      {item.value}
+                    </Text>
+                  </Group>
+                  <Progress value={item.progress} size={6} color="gray" radius="xl" />
+                </Box>
               ))}
-            </Grid>
+            </Stack>
+          </Card>
+
+          <Card
+            bg="dark.8"
+            withBorder
+            radius="md"
+            p="md"
+            style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+          >
+            <Text fw={700} fz="xl" mb="md">
+              Alerts
+            </Text>
+            <Stack gap="xs" align="center" py="md">
+              <ThemeIcon size={42} radius="xl" variant="light" color="gray">
+                <IconActivity size="1rem" />
+              </ThemeIcon>
+              <Text fw={700}>Get alerted for anomalies</Text>
+              <Text c="dimmed" fz="md" ta="center">
+                Automatically monitor your projects for anomalies and get notified.
+              </Text>
+              <Button variant="outline" size="sm" mt="xs">
+                Upgrade to Pro
+              </Button>
+            </Stack>
+          </Card>
+
+          <Card
+            bg="dark.8"
+            withBorder
+            radius="md"
+            p="md"
+            style={(theme) => ({ borderColor: theme.colors.dark[4], flex: 1 })}
+          >
+            <Text fw={700} fz="xl" mb="md">
+              Recent Previews
+            </Text>
+            <Stack gap="xs" align="center" justify="center" h="100%" py="md">
+              <ThemeIcon size={42} radius="xl" variant="light" color="gray">
+                <IconExternalLink size="1rem" />
+              </ThemeIcon>
+              <Text c="dimmed" fz="lg" ta="center">
+                Preview deployments that you have recently visited or created will appear here.
+              </Text>
+            </Stack>
+          </Card>
+        </Stack>
+      </Grid.Col>
+
+      <Grid.Col span={{ base: 12, xl: 8 }}>
+        <Card
+          bg="dark.8"
+          withBorder
+          radius="md"
+          p={0}
+          style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+        >
+          <Stack gap={0}>
+            {projects.map((project, index) => (
+              <Box
+                key={project.name}
+                p="md"
+                style={(theme) => ({
+                  borderBottom:
+                    index === projects.length - 1 ? 'none' : `1px solid ${theme.colors.dark[4]}`,
+                })}
+              >
+                <Group justify="space-between" align="center" wrap="nowrap">
+                  <Group gap="sm" style={{ minWidth: 0 }} wrap="nowrap">
+                    <ThemeIcon
+                      size={34}
+                      radius="xl"
+                      variant="light"
+                      color={project.status === 'warning' ? 'yellow' : 'teal'}
+                    >
+                      <IconWaveSine size="1rem" />
+                    </ThemeIcon>
+                    <Stack gap={2} style={{ minWidth: 0 }}>
+                      <Text fw={700} fz="xl" truncate>
+                        {project.name}
+                      </Text>
+                      <Text c="dimmed" fz="xl" truncate>
+                        {project.domain}
+                      </Text>
+                    </Stack>
+                  </Group>
+
+                  <Stack gap={2} style={{ minWidth: 220, flex: 1 }}>
+                    <Text fw={700} fz="xl" lineClamp={1}>
+                      {project.commit}
+                    </Text>
+                    <Group gap={6}>
+                      <Text c="dimmed" fz="xl">
+                        {project.updated}
+                      </Text>
+                      <IconGitBranch size="0.9rem" />
+                      <Text c="dimmed" fz="xl">
+                        {project.branch}
+                      </Text>
+                    </Group>
+                  </Stack>
+
+                  <Group gap="xs" wrap="nowrap">
+                    <Badge
+                      variant="filled"
+                      color="gray"
+                      size="lg"
+                      leftSection={<IconBrandGithub size="0.85rem" />}
+                    >
+                      {project.repo}
+                    </Badge>
+                    <ThemeIcon
+                      size={34}
+                      radius="xl"
+                      variant="outline"
+                      color={project.status === 'warning' ? 'yellow' : 'gray'}
+                    >
+                      {project.status === 'warning' ? (
+                        <IconAlertCircle size="0.95rem" />
+                      ) : (
+                        <IconWaveSine size="0.95rem" />
+                      )}
+                    </ThemeIcon>
+                    <ActionIcon variant="subtle" color="gray" size="lg">
+                      <IconDots size="1rem" />
+                    </ActionIcon>
+                  </Group>
+                </Group>
+              </Box>
+            ))}
           </Stack>
-        </Grid.Col>
-      </Grid>
-    </Stack>
+        </Card>
+      </Grid.Col>
+    </Grid>
   );
 }
 

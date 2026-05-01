@@ -1,7 +1,8 @@
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import {
   AppShell,
   ActionIcon,
+  Avatar,
   Badge,
   Box,
   Burger,
@@ -13,12 +14,11 @@ import {
   ScrollArea,
   Stack,
   Text,
-  Tooltip,
   UnstyledButton,
   useMantineColorScheme,
+  type MantineTheme,
 } from '@mantine/core';
 import {
-  IconCat,
   IconSettings,
   IconInfoCircle,
   IconSun,
@@ -28,43 +28,39 @@ import {
   IconList,
   IconPlus,
   IconChevronDown,
+  IconFolder,
+  IconRocket,
+  IconListDetails,
+  IconChartBar,
+  IconBolt,
+  IconEye,
+  IconShield,
+  IconWorld,
+  IconBuilding,
+  IconUsers,
+  IconDots,
 } from '@tabler/icons-react';
 
 import Home from './Home';
 import Settings from './settings-ui/Settings.tsx';
 import About from './About';
 import { ColorScheme, ColorSchemeType, ESettingTab, SideNavBarTabs } from '../types/ISetting';
-import { useSettingStore } from '../hooks/useSettingStore.tsx';
 import { DispatchType } from '../types/IEvents.ts';
 import { handleSettingChange } from '../utils/handleSettingChange.ts';
 import { useTranslation } from 'react-i18next';
 
 function MainWindow() {
-  const { theme: colorScheme } = useSettingStore();
   const [activeTab, setActiveTab] = useState<ESettingTab>(ESettingTab.Home);
   const [mobileOpened, setMobileOpened] = useState(false);
-  const { setColorScheme } = useMantineColorScheme();
+  const { colorScheme } = useMantineColorScheme();
   const { t } = useTranslation();
-
-  const toggleColorScheme = (value?: ColorScheme) => {
-    const newTheme =
-      value ||
-      (colorScheme === ColorSchemeType.Dark ? ColorSchemeType.Light : ColorSchemeType.Dark);
-
-    setColorScheme(newTheme);
-    handleSettingChange(DispatchType.ChangeAppTheme, newTheme);
-  };
-
-  useEffect(() => {
-    setColorScheme(colorScheme);
-  }, [colorScheme, setColorScheme]);
 
   const tabs: SideNavBarTabs[] = useMemo(
     () => [
       {
         tab: ESettingTab.Home,
         label: t('Projects'),
-        Icon: <IconCat size="0.95rem" />,
+        Icon: <IconFolder size="0.95rem" />,
         Component: Home,
       },
       {
@@ -85,71 +81,34 @@ function MainWindow() {
 
   const CurrentView = tabs.find((tab) => tab.tab === activeTab)?.Component;
 
-  const sidebar = (
-    <Flex h="100%" direction="column" justify="space-between" p={10} bg="dark.8">
-      <Stack gap="sm">
-        <Group justify="space-between" align="center" px={4} py={6}>
-          <Text fw={600} fz="sm" c="gray.0">
-            JustTodo
-          </Text>
-          <Badge variant="light" size="xs" color="gray">
-            beta
-          </Badge>
-        </Group>
-        <Divider color="dark.4" />
-        <Stack gap={4}>
-          {tabs.map((tab) => (
-            <UnstyledButton
-              key={tab.tab}
-              onClick={() => {
-                setActiveTab(tab.tab);
-                setMobileOpened(false);
-              }}
-              style={(theme) => ({
-                borderRadius: theme.radius.sm,
-                padding: '7px 10px',
-                backgroundColor: activeTab === tab.tab ? theme.colors.dark[6] : 'transparent',
-                border: `1px solid ${activeTab === tab.tab ? theme.colors.dark[4] : 'transparent'}`,
-              })}
-            >
-              <Group gap={8} wrap="nowrap">
-                <Box c={activeTab === tab.tab ? 'gray.0' : 'dark.1'}>{tab.Icon}</Box>
-                <Text fz="13px" fw={500} c={activeTab === tab.tab ? 'gray.0' : 'dark.1'}>
-                  {tab.label}
-                </Text>
-              </Group>
-            </UnstyledButton>
-          ))}
-        </Stack>
-      </Stack>
+  const navButtonStyle = (active: boolean) => (theme: MantineTheme) => ({
+    borderRadius: theme.radius.sm,
+    padding: '8px 10px',
+    backgroundColor: active ? theme.colors.dark[6] : 'transparent',
+    border: `1px solid ${active ? theme.colors.dark[4] : 'transparent'}`,
+  });
 
-      <Stack gap="xs">
-        <Divider color="dark.4" />
-        <Tooltip label={t('Toggle theme')} position="right">
-          <UnstyledButton
-            onClick={() => toggleColorScheme()}
-            style={(theme) => ({
-              borderRadius: theme.radius.sm,
-              padding: '7px 10px',
-              border: `1px solid ${theme.colors.dark[4]}`,
-              backgroundColor: theme.colors.dark[7],
-            })}
-          >
-            <Group gap={8} wrap="nowrap">
-              {colorScheme === ColorSchemeType.Dark ? (
-                <IconSun size="0.95rem" />
-              ) : (
-                <IconMoonStars size="0.95rem" />
-              )}
-              <Text fz="13px" c="dark.1">
-                {t('Theme')}
-              </Text>
-            </Group>
-          </UnstyledButton>
-        </Tooltip>
-      </Stack>
-    </Flex>
-  );
+  const toggleTheme = () => {
+    const next =
+      colorScheme === ColorSchemeType.Dark ? ColorSchemeType.Light : ColorSchemeType.Dark;
+    handleSettingChange(DispatchType.ChangeAppTheme, next as ColorScheme);
+  };
+
+  const primaryNav = [
+    { label: 'Deployments', icon: <IconRocket size="0.95rem" /> },
+    { label: 'Logs', icon: <IconListDetails size="0.95rem" /> },
+    { label: 'Analytics', icon: <IconChartBar size="0.95rem" /> },
+    { label: 'Speed Insights', icon: <IconBolt size="0.95rem" /> },
+    { label: 'Observability', icon: <IconEye size="0.95rem" /> },
+    { label: 'Firewall', icon: <IconShield size="0.95rem" /> },
+    { label: 'CDN', icon: <IconWorld size="0.95rem" /> },
+  ];
+
+  const secondaryNav = [
+    { label: 'Environment Variables', icon: <IconBolt size="0.95rem" /> },
+    { label: 'Domains', icon: <IconWorld size="0.95rem" /> },
+    { label: 'Integrations', icon: <IconBuilding size="0.95rem" /> },
+  ];
 
   return (
     <AppShell
@@ -157,54 +116,145 @@ function MainWindow() {
       navbar={{ width: 250, breakpoint: 'sm', collapsed: { mobile: !mobileOpened } }}
       bg="dark.9"
     >
-      <AppShell.Navbar>{sidebar}</AppShell.Navbar>
+      <AppShell.Navbar
+        bg="dark.8"
+        style={(theme) => ({ borderRight: `1px solid ${theme.colors.dark[4]}` })}
+      >
+        <Flex h="100%" direction="column" justify="space-between" p="sm">
+          <Stack gap="sm">
+            <Group justify="space-between" px={4}>
+              <Group gap={8}>
+                <Avatar size={20} radius="xl" color="pink" />
+                <Text fw={600} fz="sm">
+                  likanug's projects
+                </Text>
+              </Group>
+              <Badge color="red" variant="light" size="xs">
+                Paused
+              </Badge>
+            </Group>
+
+            <Input
+              leftSection={<IconSearch size="0.9rem" />}
+              rightSection={<Badge variant="outline">F</Badge>}
+              placeholder="Find..."
+              size="sm"
+              styles={(theme) => ({
+                input: {
+                  backgroundColor: theme.colors.dark[7],
+                  borderColor: theme.colors.dark[4],
+                },
+              })}
+            />
+
+            <Stack gap={4}>
+              <UnstyledButton
+                style={navButtonStyle(activeTab === ESettingTab.Home)}
+                onClick={() => setActiveTab(ESettingTab.Home)}
+              >
+                <Group gap={10}>
+                  <IconFolder size="0.95rem" />
+                  <Text fw={500}>Projects</Text>
+                </Group>
+              </UnstyledButton>
+              {primaryNav.map((item) => (
+                <UnstyledButton key={item.label} style={navButtonStyle(false)}>
+                  <Group gap={10}>
+                    <Box c="dimmed">{item.icon}</Box>
+                    <Text c="dimmed">{item.label}</Text>
+                  </Group>
+                </UnstyledButton>
+              ))}
+            </Stack>
+
+            <Divider color="dark.4" />
+
+            <Stack gap={4}>
+              {secondaryNav.map((item) => (
+                <UnstyledButton key={item.label} style={navButtonStyle(false)}>
+                  <Group gap={10}>
+                    <Box c="dimmed">{item.icon}</Box>
+                    <Text c="dimmed">{item.label}</Text>
+                  </Group>
+                </UnstyledButton>
+              ))}
+            </Stack>
+          </Stack>
+
+          <Stack gap="xs">
+            <Divider color="dark.4" />
+            <UnstyledButton style={navButtonStyle(false)} onClick={toggleTheme}>
+              <Group gap={10}>
+                {colorScheme === ColorSchemeType.Dark ? (
+                  <IconSun size="0.95rem" />
+                ) : (
+                  <IconMoonStars size="0.95rem" />
+                )}
+                <Text>{t('Theme')}</Text>
+              </Group>
+            </UnstyledButton>
+            <UnstyledButton style={navButtonStyle(false)}>
+              <Group justify="space-between">
+                <Group gap={10}>
+                  <IconUsers size="0.95rem" />
+                  <Text>Bruce Blink</Text>
+                </Group>
+                <IconDots size="0.9rem" />
+              </Group>
+            </UnstyledButton>
+          </Stack>
+        </Flex>
+      </AppShell.Navbar>
 
       <AppShell.Main>
         <Flex direction="column" h="100vh">
           <Group
             px="md"
-            py={10}
+            py="sm"
             justify="space-between"
-            wrap="nowrap"
             style={(theme) => ({
               borderBottom: `1px solid ${theme.colors.dark[4]}`,
               backgroundColor: theme.colors.dark[8],
             })}
           >
-            <Group gap={10} wrap="nowrap" style={{ minWidth: 0 }}>
+            <Group gap="xs" wrap="nowrap">
               <Burger
                 opened={mobileOpened}
-                onClick={() => setMobileOpened((opened) => !opened)}
+                onClick={() => setMobileOpened((v) => !v)}
                 hiddenFrom="sm"
                 size="sm"
               />
-              <Button
-                variant="subtle"
-                size="compact-sm"
-                color="gray"
-                rightSection={<IconChevronDown size="0.8rem" />}
-              >
-                {t('All Projects')}
+              <Button variant="subtle" rightSection={<IconChevronDown size="0.85rem" />}>
+                All Projects
               </Button>
-              <Input
-                placeholder={t('Search Projects...')}
-                leftSection={<IconSearch size="0.85rem" />}
-                size="sm"
-                w={{ base: 160, sm: 340 }}
-              />
             </Group>
-            <Group gap={6} wrap="nowrap">
-              <ActionIcon variant="subtle" size="lg" color="gray">
+            <Text fw={600}>Overview</Text>
+            <Group gap={6}>
+              <ActionIcon variant="subtle">
                 <IconLayoutGrid size="0.95rem" />
               </ActionIcon>
-              <ActionIcon variant="subtle" size="lg" color="gray">
+              <ActionIcon variant="subtle">
                 <IconList size="0.95rem" />
               </ActionIcon>
-              <Button leftSection={<IconPlus size="0.9rem" />} size="xs">
-                {t('Add New...')}
+              <Button leftSection={<IconPlus size="0.9rem" />} size="sm">
+                Add New...
               </Button>
             </Group>
           </Group>
+
+          <Box p="md" style={(theme) => ({ borderBottom: `1px solid ${theme.colors.dark[4]}` })}>
+            <Input
+              leftSection={<IconSearch size="0.9rem" />}
+              placeholder={t('Search Projects...')}
+              size="md"
+              styles={(theme) => ({
+                input: {
+                  backgroundColor: theme.colors.dark[8],
+                  borderColor: theme.colors.dark[4],
+                },
+              })}
+            />
+          </Box>
 
           <ScrollArea flex={1} type="scroll" scrollbars="y">
             <Box p="md">{CurrentView ? <CurrentView /> : <Text>Empty</Text>}</Box>
