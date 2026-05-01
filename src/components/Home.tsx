@@ -18,6 +18,9 @@ import {
   IconGitBranch,
   IconBrandGithub,
   IconExternalLink,
+  IconLayoutGrid,
+  IconList,
+  IconAdjustmentsHorizontal,
 } from '@tabler/icons-react';
 
 const usageItems = [
@@ -82,7 +85,7 @@ function Home() {
   return (
     <Stack gap="lg">
       <Group justify="space-between" align="center">
-        <Text fw={600} fz="lg">
+        <Text fw={600} fz="md" c="gray.1">
           Overview
         </Text>
         <Badge color="gray" variant="light" size="sm">
@@ -90,9 +93,9 @@ function Home() {
         </Badge>
       </Group>
 
-      <Grid gutter="md">
+      <Grid gutter="md" align="stretch">
         <Grid.Col span={{ base: 12, xl: 4 }}>
-          <Stack gap="md">
+          <Stack gap="md" h="100%">
             <Card
               bg="dark.8"
               withBorder
@@ -156,9 +159,9 @@ function Home() {
               withBorder
               radius="md"
               p="md"
-              style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+              style={(theme) => ({ borderColor: theme.colors.dark[4], flex: 1 })}
             >
-              <Stack gap="xs" align="center" py="md">
+              <Stack gap="xs" align="center" justify="center" h="100%" py="md">
                 <ThemeIcon size={34} radius="xl" variant="light" color="gray">
                   <IconExternalLink size="0.9rem" />
                 </ThemeIcon>
@@ -175,9 +178,23 @@ function Home() {
 
         <Grid.Col span={{ base: 12, xl: 8 }}>
           <Stack gap="sm">
-            <Text fw={600} fz="sm">
-              Projects
-            </Text>
+            <Group justify="space-between" align="center">
+              <Text fw={600} fz="sm">
+                Projects
+              </Text>
+              <Group gap={6}>
+                <ActionIcon variant="subtle" size="sm" color="gray">
+                  <IconAdjustmentsHorizontal size="0.85rem" />
+                </ActionIcon>
+                <ActionIcon variant="subtle" size="sm" color="gray">
+                  <IconLayoutGrid size="0.85rem" />
+                </ActionIcon>
+                <ActionIcon variant="subtle" size="sm" color="gray">
+                  <IconList size="0.85rem" />
+                </ActionIcon>
+              </Group>
+            </Group>
+
             <Grid gutter="md">
               {projects.map((project) => (
                 <Grid.Col key={project.name} span={{ base: 12, lg: 6 }}>
@@ -186,9 +203,9 @@ function Home() {
                     withBorder
                     radius="md"
                     p="md"
-                    style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+                    style={(theme) => ({ borderColor: theme.colors.dark[4], height: '100%' })}
                   >
-                    <Stack gap={8}>
+                    <Stack gap={8} h="100%">
                       <Group justify="space-between" align="flex-start" wrap="nowrap">
                         <Box style={{ minWidth: 0 }}>
                           <Text fw={600} fz="sm" truncate>
@@ -214,17 +231,19 @@ function Home() {
                         {project.commit}
                       </Text>
 
-                      <Group justify="space-between" mt={2}>
-                        <Text fz="xs" c="dimmed">
-                          {project.updated}
-                        </Text>
-                        <Group gap={4} wrap="nowrap">
-                          <IconGitBranch size="0.8rem" />
+                      <Box style={{ marginTop: 'auto' }}>
+                        <Group justify="space-between" mt={2}>
                           <Text fz="xs" c="dimmed">
-                            {project.branch}
+                            {project.updated}
                           </Text>
+                          <Group gap={4} wrap="nowrap">
+                            <IconGitBranch size="0.8rem" />
+                            <Text fz="xs" c="dimmed">
+                              {project.branch}
+                            </Text>
+                          </Group>
                         </Group>
-                      </Group>
+                      </Box>
                     </Stack>
                   </Card>
                 </Grid.Col>
