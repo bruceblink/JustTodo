@@ -86,5 +86,10 @@
   "Allow pet climb": "允许宠物攀爬",
   "If allow pet climb turn on, pet will be able to climb on the left, right, and top of the window": "如果允许宠物攀爬，宠物将能在窗口的左边、右边和顶部攀爬",
   "Search for pets": "搜索宠物",
-  "Search for my pets": "搜索我的宠物"
+  "Search for my pets": "搜索我的宠物",
+  "Projects": "项目",
+  "Theme": "主题",
+  "All Projects": "全部项目",
+  "Search Projects...": "搜索项目...",
+  "Add New...": "新建..."
 }

@@ -1,5 +1,5 @@
 import React, { memo, useEffect } from 'react';
-import { Select } from '@mantine/core';
+import { Card, Select, Stack, Text } from '@mantine/core';
 import { IconLanguage } from '@tabler/icons-react';
 import languages from '@/locale/languages.ts';
 import { handleSettingChange } from '@utils/handleSettingChange.ts';
@@ -52,34 +52,43 @@ function Settings() {
     ? [
         {
           title: t('Auto start-up'),
-          description: t('Automatically open JustTodo every time u start the computer'),
+          description: t('Automatically open WindowPet every time u start the computer'),
           checked: allowAutoStartUp,
           dispatchType: DispatchType.SwitchAppAutoStartUp,
         },
       ]
     : [];
 
-  const SettingSwitches = settingSwitches.map((setting, index) => {
-    return <SettingSwitch {...setting} key={index} />;
-  });
-
   return (
-    <>
-      {SettingSwitches}
-      <Select
-        leftSection={<IconLanguage />}
-        allowDeselect={false}
-        checkIconPosition={'right'}
-        my={'sm'}
-        label={t('Language')}
-        placeholder="Pick one"
-        // itemComponent={SelectItem}
-        data={languages}
-        maxDropdownHeight={400}
-        value={i18n.language}
-        onChange={(value) => handleSettingChange(DispatchType.ChangeAppLanguage, value as string)}
-      />
-    </>
+    <Stack gap="md">
+      <Text fw={600} fz="xl">
+        {t('Settings')}
+      </Text>
+
+      {settingSwitches.map((setting) => (
+        <SettingSwitch {...setting} key={setting.dispatchType} />
+      ))}
+
+      <Card
+        bg="dark.8"
+        withBorder
+        radius="md"
+        p="md"
+        style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+      >
+        <Select
+          leftSection={<IconLanguage size="1rem" />}
+          allowDeselect={false}
+          checkIconPosition="right"
+          label={t('Language')}
+          placeholder="Pick one"
+          data={languages}
+          maxDropdownHeight={400}
+          value={i18n.language}
+          onChange={(value) => handleSettingChange(DispatchType.ChangeAppLanguage, value as string)}
+        />
+      </Card>
+    </Stack>
   );
 }
 

@@ -1,4 +1,4 @@
-import { Switch, Group, Text, Divider } from '@mantine/core';
+import { Switch, Group, Text, Paper, Stack } from '@mantine/core';
 import { ISettingsContent } from '@/types/ISetting.ts';
 import { handleSettingChange } from '@utils/handleSettingChange.ts';
 
@@ -10,23 +10,28 @@ function SettingSwitch({
   component,
 }: ISettingsContent) {
   return (
-    <>
-      <Group justify={'space-between'}>
-        <div>
-          <Text>{title}</Text>
-          <Text maw={460} fz={'xs'} c={'dimmed'}>
+    <Paper
+      bg="dark.8"
+      withBorder
+      radius="md"
+      p="md"
+      style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+    >
+      <Group justify="space-between" align="flex-start" wrap="nowrap">
+        <Stack gap={4} style={{ minWidth: 0 }}>
+          <Text fw={500}>{title}</Text>
+          <Text fz="sm" c="dimmed">
             {description}
           </Text>
-        </div>
+        </Stack>
         <Switch
-          size={'lg'}
+          size="md"
           checked={checked}
           onChange={(event) => handleSettingChange(dispatchType, event.target.checked)}
         />
       </Group>
       {component}
-      <Divider my={'sm'} />
-    </>
+    </Paper>
   );
 }
 

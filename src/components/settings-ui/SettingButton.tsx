@@ -1,22 +1,27 @@
-import { Group, Text, Divider, Button } from '@mantine/core';
+import { Group, Text, Button, Paper, Stack } from '@mantine/core';
 import { SettingButtonProps } from '@/types/ISetting.ts';
 
 function SettingButton({ title, description, btnLabel, btnFunction }: SettingButtonProps) {
   return (
-    <>
-      <Group justify={'space-between'}>
-        <div>
-          <Text>{title}</Text>
-          <Text maw={460} fz={'xs'} c={'dimmed'}>
+    <Paper
+      bg="dark.8"
+      withBorder
+      radius="md"
+      p="md"
+      style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+    >
+      <Group justify="space-between" align="flex-start" wrap="nowrap">
+        <Stack gap={4} style={{ minWidth: 0 }}>
+          <Text fw={500}>{title}</Text>
+          <Text fz="sm" c="dimmed">
             {description}
           </Text>
-        </div>
+        </Stack>
         <Button variant="outline" onClick={btnFunction}>
           {btnLabel}
         </Button>
       </Group>
-      <Divider my={'sm'} />
-    </>
+    </Paper>
   );
 }
 
