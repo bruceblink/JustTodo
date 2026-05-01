@@ -15,11 +15,11 @@ import {
   Stack,
   Text,
   UnstyledButton,
+  useMantineColorScheme,
   type MantineTheme,
 } from '@mantine/core';
 import {
-  IconSun,
-  IconMoonStars,
+  IconSettings,
   IconSearch,
   IconLayoutGrid,
   IconList,
@@ -41,32 +41,46 @@ import {
 import Home from './Home';
 import Settings from './settings-ui/Settings.tsx';
 import About from './About';
-import { ColorScheme, ColorSchemeType, ESettingTab } from '../types/ISetting';
-import { DispatchType } from '../types/IEvents.ts';
-import { handleSettingChange } from '../utils/handleSettingChange.ts';
+import { ESettingTab } from '../types/ISetting';
 import { useTranslation } from 'react-i18next';
-import { useSettingStore } from '@/hooks/useSettingStore.tsx';
 
 type LayoutMode = 'grid' | 'list';
+
+const getSurfaceColor = (theme: MantineTheme, isDark: boolean) =>
+  isDark ? theme.colors.dark[8] : theme.white;
+
+const getMutedSurfaceColor = (theme: MantineTheme, isDark: boolean) =>
+  isDark ? theme.colors.dark[7] : theme.colors.gray[0];
+
+const getBorderColor = (theme: MantineTheme, isDark: boolean) =>
+  isDark ? theme.colors.dark[4] : theme.colors.gray[3];
 
 function MainWindow() {
   const [activeTab, setActiveTab] = useState<ESettingTab>(ESettingTab.Home);
   const [mobileOpened, setMobileOpened] = useState(false);
   const [layoutMode, setLayoutMode] = useState<LayoutMode>('list');
-  const { theme } = useSettingStore();
   const { t } = useTranslation();
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === 'dark';
+
+  const isHome = activeTab === ESettingTab.Home;
+  const pageTitle =
+    activeTab === ESettingTab.Settings
+      ? t('Settings')
+      : activeTab === ESettingTab.About
+        ? t('About')
+        : 'Overview';
 
   const navButtonStyle = (active: boolean) => (theme: MantineTheme) => ({
     borderRadius: theme.radius.sm,
     padding: '8px 10px',
-    backgroundColor: active ? theme.colors.dark[6] : 'transparent',
-    border: `1px solid ${active ? theme.colors.dark[4] : 'transparent'}`,
+    backgroundColor: active
+      ? isDark
+        ? theme.colors.dark[6]
+        : theme.colors.gray[1]
+      : 'transparent',
+    border: `1px solid ${active ? getBorderColor(theme, isDark) : 'transparent'}`,
   });
-
-  const toggleTheme = () => {
-    const next = theme === ColorSchemeType.Dark ? ColorSchemeType.Light : ColorSchemeType.Dark;
-    handleSettingChange(DispatchType.ChangeAppTheme, next as ColorScheme);
-  };
 
   const primaryNav = [
     { label: 'Deployments', icon: <IconRocket size="0.95rem" /> },
@@ -88,11 +102,12 @@ function MainWindow() {
     <AppShell
       padding={0}
       navbar={{ width: 250, breakpoint: 'sm', collapsed: { mobile: !mobileOpened } }}
-      bg="dark.9"
     >
       <AppShell.Navbar
-        bg="dark.8"
-        style={(theme) => ({ borderRight: `1px solid ${theme.colors.dark[4]}` })}
+        style={(theme) => ({
+          borderRight: `1px solid ${getBorderColor(theme, isDark)}`,
+          backgroundColor: getSurfaceColor(theme, isDark),
+        })}
       >
         <Flex h="100%" direction="column" justify="space-between" p="sm">
           <Stack gap="sm">
@@ -115,8 +130,8 @@ function MainWindow() {
               size="sm"
               styles={(theme) => ({
                 input: {
-                  backgroundColor: theme.colors.dark[7],
-                  borderColor: theme.colors.dark[4],
+                  backgroundColor: getMutedSurfaceColor(theme, isDark),
+                  borderColor: getBorderColor(theme, isDark),
                 },
               })}
             />
@@ -143,7 +158,7 @@ function MainWindow() {
               ))}
             </Stack>
 
-            <Divider color="dark.4" />
+            <Divider color="gray.4" />
 
             <Stack gap={4}>
               {secondaryNav.map((item) => (
@@ -160,15 +175,14 @@ function MainWindow() {
           </Stack>
 
           <Stack gap="xs">
-            <Divider color="dark.4" />
-            <UnstyledButton style={navButtonStyle(false)} onClick={toggleTheme}>
+            <Divider color="gray.4" />
+            <UnstyledButton
+              style={navButtonStyle(activeTab === ESettingTab.Settings)}
+              onClick={() => setActiveTab(ESettingTab.Settings)}
+            >
               <Group gap={10} wrap="nowrap">
-                {theme === ColorSchemeType.Dark ? (
-                  <IconSun size="0.95rem" />
-                ) : (
-                  <IconMoonStars size="0.95rem" />
-                )}
-                <Text>{t('Theme')}</Text>
+                <IconSettings size="0.95rem" />
+                <Text>{t('Settings')}</Text>
               </Group>
             </UnstyledButton>
             <UnstyledButton style={navButtonStyle(false)}>
@@ -192,8 +206,8 @@ function MainWindow() {
             justify="space-between"
             wrap="nowrap"
             style={(theme) => ({
-              borderBottom: `1px solid ${theme.colors.dark[4]}`,
-              backgroundColor: theme.colors.dark[8],
+              borderBottom: `1px solid ${getBorderColor(theme, isDark)}`,
+              backgroundColor: getSurfaceColor(theme, isDark),
             })}
           >
             <Group gap="xs" wrap="nowrap" style={{ minWidth: 0 }}>
@@ -203,45 +217,59 @@ function MainWindow() {
                 hiddenFrom="sm"
                 size="sm"
               />
-              <Button variant="subtle" rightSection={<IconChevronDown size="0.85rem" />}>
-                All Projects
-              </Button>
+              {isHome ? (
+                <Button variant="subtle" rightSection={<IconChevronDown size="0.85rem" />}>
+                  All Projects
+                </Button>
+              ) : (
+                <Text fw={600}>{pageTitle}</Text>
+              )}
             </Group>
+
             <Text fw={600} visibleFrom="sm">
-              Overview
+              {pageTitle}
             </Text>
-            <Group gap={6} wrap="nowrap">
-              <ActionIcon
-                variant={layoutMode === 'grid' ? 'filled' : 'subtle'}
-                onClick={() => setLayoutMode('grid')}
-              >
-                <IconLayoutGrid size="0.95rem" />
-              </ActionIcon>
-              <ActionIcon
-                variant={layoutMode === 'list' ? 'filled' : 'subtle'}
-                onClick={() => setLayoutMode('list')}
-              >
-                <IconList size="0.95rem" />
-              </ActionIcon>
-              <Button leftSection={<IconPlus size="0.9rem" />} size="sm" visibleFrom="sm">
-                Add New...
-              </Button>
-            </Group>
+
+            <Group gap={6} wrap="nowrap" />
           </Group>
 
-          <Box p="md" style={(theme) => ({ borderBottom: `1px solid ${theme.colors.dark[4]}` })}>
-            <Input
-              leftSection={<IconSearch size="0.9rem" />}
-              placeholder={t('Search Projects...')}
-              size="md"
-              styles={(theme) => ({
-                input: {
-                  backgroundColor: theme.colors.dark[8],
-                  borderColor: theme.colors.dark[4],
-                },
-              })}
-            />
-          </Box>
+          {isHome && (
+            <Box
+              px="md"
+              py="sm"
+              style={(theme) => ({ borderBottom: `1px solid ${getBorderColor(theme, isDark)}` })}
+            >
+              <Group gap="sm" wrap="nowrap" align="center">
+                <Input
+                  leftSection={<IconSearch size="0.9rem" />}
+                  placeholder={t('Search Projects...')}
+                  size="md"
+                  style={{ flex: 1 }}
+                  styles={(theme) => ({
+                    input: {
+                      backgroundColor: getMutedSurfaceColor(theme, isDark),
+                      borderColor: getBorderColor(theme, isDark),
+                    },
+                  })}
+                />
+                <ActionIcon
+                  variant={layoutMode === 'grid' ? 'filled' : 'subtle'}
+                  onClick={() => setLayoutMode('grid')}
+                >
+                  <IconLayoutGrid size="0.95rem" />
+                </ActionIcon>
+                <ActionIcon
+                  variant={layoutMode === 'list' ? 'filled' : 'subtle'}
+                  onClick={() => setLayoutMode('list')}
+                >
+                  <IconList size="0.95rem" />
+                </ActionIcon>
+                <Button leftSection={<IconPlus size="0.9rem" />} size="sm" visibleFrom="sm">
+                  Add New...
+                </Button>
+              </Group>
+            </Box>
+          )}
 
           <ScrollArea flex={1} type="scroll" scrollbars="y">
             <Box p="md">

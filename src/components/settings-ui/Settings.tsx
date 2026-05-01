@@ -1,5 +1,5 @@
 import React, { memo, useEffect } from 'react';
-import { Card, Select, SegmentedControl, Stack, Text } from '@mantine/core';
+import { Card, Select, SegmentedControl, Stack, Text, useMantineColorScheme } from '@mantine/core';
 import { IconLanguage } from '@tabler/icons-react';
 import languages from '@/locale/languages.ts';
 import { handleSettingChange } from '@utils/handleSettingChange.ts';
@@ -21,6 +21,8 @@ interface ISettingsContent {
 function Settings() {
   const { t, i18n } = useTranslation();
   const { allowAutoStartUp, setAllowAutoStartUp, theme } = useSettingStore();
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === 'dark';
 
   useEffect(() => {
     if (!featureFlags.autostart) {
@@ -66,11 +68,13 @@ function Settings() {
       </Text>
 
       <Card
-        bg="dark.8"
         withBorder
         radius="md"
         p="md"
-        style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+        style={(theme) => ({
+          borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
+          backgroundColor: isDark ? theme.colors.dark[8] : theme.white,
+        })}
       >
         <Stack gap="xs">
           <Text fw={600}>{t('Theme')}</Text>
@@ -90,11 +94,13 @@ function Settings() {
       ))}
 
       <Card
-        bg="dark.8"
         withBorder
         radius="md"
         p="md"
-        style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+        style={(theme) => ({
+          borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
+          backgroundColor: isDark ? theme.colors.dark[8] : theme.white,
+        })}
       >
         <Select
           leftSection={<IconLanguage size="1rem" />}
@@ -108,12 +114,12 @@ function Settings() {
           onChange={(value) => handleSettingChange(DispatchType.ChangeAppLanguage, value as string)}
           styles={(theme) => ({
             input: {
-              backgroundColor: theme.colors.dark[7],
-              borderColor: theme.colors.dark[4],
+              backgroundColor: isDark ? theme.colors.dark[7] : theme.colors.gray[0],
+              borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
             },
             dropdown: {
-              backgroundColor: theme.colors.dark[8],
-              borderColor: theme.colors.dark[4],
+              backgroundColor: isDark ? theme.colors.dark[8] : theme.white,
+              borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
             },
           })}
         />

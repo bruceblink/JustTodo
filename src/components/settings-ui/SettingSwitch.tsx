@@ -1,4 +1,4 @@
-import { Switch, Group, Text, Paper, Stack } from '@mantine/core';
+import { Switch, Group, Text, Paper, Stack, useMantineColorScheme } from '@mantine/core';
 import { ISettingsContent } from '@/types/ISetting.ts';
 import { handleSettingChange } from '@utils/handleSettingChange.ts';
 
@@ -9,13 +9,18 @@ function SettingSwitch({
   dispatchType,
   component,
 }: ISettingsContent) {
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === 'dark';
+
   return (
     <Paper
-      bg="dark.8"
       withBorder
       radius="md"
       p="md"
-      style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+      style={(theme) => ({
+        borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
+        backgroundColor: isDark ? theme.colors.dark[8] : theme.white,
+      })}
     >
       <Group justify="space-between" align="flex-start" wrap="nowrap">
         <Stack gap={4} style={{ minWidth: 0 }}>
