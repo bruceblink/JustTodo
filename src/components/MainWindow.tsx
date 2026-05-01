@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react';
+import { memo, useState } from 'react';
 import {
   AppShell,
   ActionIcon,
@@ -15,12 +15,9 @@ import {
   Stack,
   Text,
   UnstyledButton,
-  useMantineColorScheme,
   type MantineTheme,
 } from '@mantine/core';
 import {
-  IconSettings,
-  IconInfoCircle,
   IconSun,
   IconMoonStars,
   IconSearch,
@@ -44,42 +41,20 @@ import {
 import Home from './Home';
 import Settings from './settings-ui/Settings.tsx';
 import About from './About';
-import { ColorScheme, ColorSchemeType, ESettingTab, SideNavBarTabs } from '../types/ISetting';
+import { ColorScheme, ColorSchemeType, ESettingTab } from '../types/ISetting';
 import { DispatchType } from '../types/IEvents.ts';
 import { handleSettingChange } from '../utils/handleSettingChange.ts';
 import { useTranslation } from 'react-i18next';
+import { useSettingStore } from '@/hooks/useSettingStore.tsx';
+
+type LayoutMode = 'grid' | 'list';
 
 function MainWindow() {
   const [activeTab, setActiveTab] = useState<ESettingTab>(ESettingTab.Home);
   const [mobileOpened, setMobileOpened] = useState(false);
-  const { colorScheme } = useMantineColorScheme();
+  const [layoutMode, setLayoutMode] = useState<LayoutMode>('list');
+  const { theme } = useSettingStore();
   const { t } = useTranslation();
-
-  const tabs: SideNavBarTabs[] = useMemo(
-    () => [
-      {
-        tab: ESettingTab.Home,
-        label: t('Projects'),
-        Icon: <IconFolder size="0.95rem" />,
-        Component: Home,
-      },
-      {
-        tab: ESettingTab.Settings,
-        label: t('Settings'),
-        Icon: <IconSettings size="0.95rem" />,
-        Component: Settings,
-      },
-      {
-        tab: ESettingTab.About,
-        label: t('About'),
-        Icon: <IconInfoCircle size="0.95rem" />,
-        Component: About,
-      },
-    ],
-    [t],
-  );
-
-  const CurrentView = tabs.find((tab) => tab.tab === activeTab)?.Component;
 
   const navButtonStyle = (active: boolean) => (theme: MantineTheme) => ({
     borderRadius: theme.radius.sm,
@@ -89,8 +64,7 @@ function MainWindow() {
   });
 
   const toggleTheme = () => {
-    const next =
-      colorScheme === ColorSchemeType.Dark ? ColorSchemeType.Light : ColorSchemeType.Dark;
+    const next = theme === ColorSchemeType.Dark ? ColorSchemeType.Light : ColorSchemeType.Dark;
     handleSettingChange(DispatchType.ChangeAppTheme, next as ColorScheme);
   };
 
@@ -122,10 +96,10 @@ function MainWindow() {
       >
         <Flex h="100%" direction="column" justify="space-between" p="sm">
           <Stack gap="sm">
-            <Group justify="space-between" px={4}>
-              <Group gap={8}>
+            <Group justify="space-between" px={4} wrap="nowrap">
+              <Group gap={8} wrap="nowrap">
                 <Avatar size={20} radius="xl" color="pink" />
-                <Text fw={600} fz="sm">
+                <Text fw={600} fz="sm" truncate>
                   likanug's projects
                 </Text>
               </Group>
@@ -152,16 +126,18 @@ function MainWindow() {
                 style={navButtonStyle(activeTab === ESettingTab.Home)}
                 onClick={() => setActiveTab(ESettingTab.Home)}
               >
-                <Group gap={10}>
+                <Group gap={10} wrap="nowrap">
                   <IconFolder size="0.95rem" />
                   <Text fw={500}>Projects</Text>
                 </Group>
               </UnstyledButton>
               {primaryNav.map((item) => (
                 <UnstyledButton key={item.label} style={navButtonStyle(false)}>
-                  <Group gap={10}>
+                  <Group gap={10} wrap="nowrap">
                     <Box c="dimmed">{item.icon}</Box>
-                    <Text c="dimmed">{item.label}</Text>
+                    <Text c="dimmed" truncate>
+                      {item.label}
+                    </Text>
                   </Group>
                 </UnstyledButton>
               ))}
@@ -172,9 +148,11 @@ function MainWindow() {
             <Stack gap={4}>
               {secondaryNav.map((item) => (
                 <UnstyledButton key={item.label} style={navButtonStyle(false)}>
-                  <Group gap={10}>
+                  <Group gap={10} wrap="nowrap">
                     <Box c="dimmed">{item.icon}</Box>
-                    <Text c="dimmed">{item.label}</Text>
+                    <Text c="dimmed" truncate>
+                      {item.label}
+                    </Text>
                   </Group>
                 </UnstyledButton>
               ))}
@@ -184,8 +162,8 @@ function MainWindow() {
           <Stack gap="xs">
             <Divider color="dark.4" />
             <UnstyledButton style={navButtonStyle(false)} onClick={toggleTheme}>
-              <Group gap={10}>
-                {colorScheme === ColorSchemeType.Dark ? (
+              <Group gap={10} wrap="nowrap">
+                {theme === ColorSchemeType.Dark ? (
                   <IconSun size="0.95rem" />
                 ) : (
                   <IconMoonStars size="0.95rem" />
@@ -194,10 +172,10 @@ function MainWindow() {
               </Group>
             </UnstyledButton>
             <UnstyledButton style={navButtonStyle(false)}>
-              <Group justify="space-between">
-                <Group gap={10}>
+              <Group justify="space-between" wrap="nowrap">
+                <Group gap={10} wrap="nowrap">
                   <IconUsers size="0.95rem" />
-                  <Text>Bruce Blink</Text>
+                  <Text truncate>Bruce Blink</Text>
                 </Group>
                 <IconDots size="0.9rem" />
               </Group>
@@ -212,12 +190,13 @@ function MainWindow() {
             px="md"
             py="sm"
             justify="space-between"
+            wrap="nowrap"
             style={(theme) => ({
               borderBottom: `1px solid ${theme.colors.dark[4]}`,
               backgroundColor: theme.colors.dark[8],
             })}
           >
-            <Group gap="xs" wrap="nowrap">
+            <Group gap="xs" wrap="nowrap" style={{ minWidth: 0 }}>
               <Burger
                 opened={mobileOpened}
                 onClick={() => setMobileOpened((v) => !v)}
@@ -228,15 +207,23 @@ function MainWindow() {
                 All Projects
               </Button>
             </Group>
-            <Text fw={600}>Overview</Text>
-            <Group gap={6}>
-              <ActionIcon variant="subtle">
+            <Text fw={600} visibleFrom="sm">
+              Overview
+            </Text>
+            <Group gap={6} wrap="nowrap">
+              <ActionIcon
+                variant={layoutMode === 'grid' ? 'filled' : 'subtle'}
+                onClick={() => setLayoutMode('grid')}
+              >
                 <IconLayoutGrid size="0.95rem" />
               </ActionIcon>
-              <ActionIcon variant="subtle">
+              <ActionIcon
+                variant={layoutMode === 'list' ? 'filled' : 'subtle'}
+                onClick={() => setLayoutMode('list')}
+              >
                 <IconList size="0.95rem" />
               </ActionIcon>
-              <Button leftSection={<IconPlus size="0.9rem" />} size="sm">
+              <Button leftSection={<IconPlus size="0.9rem" />} size="sm" visibleFrom="sm">
                 Add New...
               </Button>
             </Group>
@@ -257,7 +244,11 @@ function MainWindow() {
           </Box>
 
           <ScrollArea flex={1} type="scroll" scrollbars="y">
-            <Box p="md">{CurrentView ? <CurrentView /> : <Text>Empty</Text>}</Box>
+            <Box p="md">
+              {activeTab === ESettingTab.Home && <Home layoutMode={layoutMode} />}
+              {activeTab === ESettingTab.Settings && <Settings />}
+              {activeTab === ESettingTab.About && <About />}
+            </Box>
           </ScrollArea>
         </Flex>
       </AppShell.Main>

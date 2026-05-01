@@ -8,6 +8,7 @@ import {
   Grid,
   Group,
   Progress,
+  SimpleGrid,
   Stack,
   Text,
   ThemeIcon,
@@ -24,7 +25,11 @@ import {
 } from '@tabler/icons-react';
 import { projects, usageItems } from './home-data';
 
-function Home() {
+interface HomeProps {
+  layoutMode: 'grid' | 'list';
+}
+
+function Home({ layoutMode }: HomeProps) {
   return (
     <Grid gutter="md" align="stretch">
       <Grid.Col span={{ base: 12, xl: 4 }}>
@@ -37,15 +42,15 @@ function Home() {
             style={(theme) => ({ borderColor: theme.colors.dark[4] })}
           >
             <Stack gap="sm">
-              <Group justify="space-between">
-                <Stack gap={2}>
-                  <Group gap={6}>
+              <Group justify="space-between" wrap="nowrap">
+                <Stack gap={2} style={{ minWidth: 0 }}>
+                  <Group gap={6} wrap="nowrap">
                     <Text fw={700} c="red.4">
                       Paused
                     </Text>
                     <IconAlertCircle size="0.9rem" color="var(--mantine-color-red-4)" />
                   </Group>
-                  <Text c="dimmed" fz="sm">
+                  <Text c="dimmed" fz="sm" truncate>
                     Upgrade to resume service
                   </Text>
                 </Stack>
@@ -56,10 +61,10 @@ function Home() {
 
               {usageItems.map((item) => (
                 <Box key={item.label}>
-                  <Group justify="space-between" mb={5}>
-                    <Group gap={6}>
+                  <Group justify="space-between" mb={5} wrap="nowrap">
+                    <Group gap={6} wrap="nowrap" style={{ minWidth: 0 }}>
                       <IconInfoCircle size="0.75rem" />
-                      <Text fz="md" fw={600}>
+                      <Text fz="md" fw={600} truncate>
                         {item.label}
                       </Text>
                     </Group>
@@ -120,88 +125,160 @@ function Home() {
       </Grid.Col>
 
       <Grid.Col span={{ base: 12, xl: 8 }}>
-        <Card
-          bg="dark.8"
-          withBorder
-          radius="md"
-          p={0}
-          style={(theme) => ({ borderColor: theme.colors.dark[4] })}
-        >
-          <Stack gap={0}>
-            {projects.map((project, index) => (
-              <Box
+        {layoutMode === 'list' ? (
+          <Card
+            bg="dark.8"
+            withBorder
+            radius="md"
+            p={0}
+            style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+          >
+            <Stack gap={0}>
+              {projects.map((project, index) => (
+                <Box
+                  key={project.name}
+                  p="md"
+                  style={(theme) => ({
+                    borderBottom:
+                      index === projects.length - 1 ? 'none' : `1px solid ${theme.colors.dark[4]}`,
+                  })}
+                >
+                  <Group justify="space-between" align="center" wrap="wrap">
+                    <Group gap="sm" style={{ minWidth: 0, flex: 1 }} wrap="nowrap">
+                      <ThemeIcon
+                        size={34}
+                        radius="xl"
+                        variant="light"
+                        color={project.status === 'warning' ? 'yellow' : 'teal'}
+                      >
+                        <IconWaveSine size="1rem" />
+                      </ThemeIcon>
+                      <Stack gap={2} style={{ minWidth: 0 }}>
+                        <Text fw={700} fz="xl" truncate>
+                          {project.name}
+                        </Text>
+                        <Text c="dimmed" fz="lg" truncate>
+                          {project.domain}
+                        </Text>
+                      </Stack>
+                    </Group>
+
+                    <Stack gap={2} style={{ minWidth: 220, flex: 1 }}>
+                      <Text fw={700} fz="lg" lineClamp={1}>
+                        {project.commit}
+                      </Text>
+                      <Group gap={6} wrap="nowrap">
+                        <Text c="dimmed" fz="md">
+                          {project.updated}
+                        </Text>
+                        <IconGitBranch size="0.9rem" />
+                        <Text c="dimmed" fz="md" truncate>
+                          {project.branch}
+                        </Text>
+                      </Group>
+                    </Stack>
+
+                    <Group gap="xs" wrap="nowrap">
+                      <Badge
+                        variant="filled"
+                        color="gray"
+                        size="lg"
+                        leftSection={<IconBrandGithub size="0.85rem" />}
+                      >
+                        {project.repo}
+                      </Badge>
+                      <ThemeIcon
+                        size={34}
+                        radius="xl"
+                        variant="outline"
+                        color={project.status === 'warning' ? 'yellow' : 'gray'}
+                      >
+                        {project.status === 'warning' ? (
+                          <IconAlertCircle size="0.95rem" />
+                        ) : (
+                          <IconWaveSine size="0.95rem" />
+                        )}
+                      </ThemeIcon>
+                      <ActionIcon variant="subtle" color="gray" size="lg">
+                        <IconDots size="1rem" />
+                      </ActionIcon>
+                    </Group>
+                  </Group>
+                </Box>
+              ))}
+            </Stack>
+          </Card>
+        ) : (
+          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
+            {projects.map((project) => (
+              <Card
                 key={project.name}
+                bg="dark.8"
+                withBorder
+                radius="md"
                 p="md"
-                style={(theme) => ({
-                  borderBottom:
-                    index === projects.length - 1 ? 'none' : `1px solid ${theme.colors.dark[4]}`,
-                })}
+                style={(theme) => ({ borderColor: theme.colors.dark[4] })}
               >
-                <Group justify="space-between" align="center" wrap="nowrap">
-                  <Group gap="sm" style={{ minWidth: 0 }} wrap="nowrap">
-                    <ThemeIcon
-                      size={34}
-                      radius="xl"
-                      variant="light"
-                      color={project.status === 'warning' ? 'yellow' : 'teal'}
-                    >
-                      <IconWaveSine size="1rem" />
-                    </ThemeIcon>
-                    <Stack gap={2} style={{ minWidth: 0 }}>
-                      <Text fw={700} fz="xl" truncate>
+                <Stack gap="sm">
+                  <Group justify="space-between" wrap="nowrap">
+                    <Group gap="xs" wrap="nowrap" style={{ minWidth: 0 }}>
+                      <ThemeIcon
+                        size={32}
+                        radius="xl"
+                        variant="light"
+                        color={project.status === 'warning' ? 'yellow' : 'teal'}
+                      >
+                        <IconWaveSine size="0.95rem" />
+                      </ThemeIcon>
+                      <Text fw={700} truncate>
                         {project.name}
                       </Text>
-                      <Text c="dimmed" fz="xl" truncate>
-                        {project.domain}
-                      </Text>
-                    </Stack>
-                  </Group>
-
-                  <Stack gap={2} style={{ minWidth: 220, flex: 1 }}>
-                    <Text fw={700} fz="xl" lineClamp={1}>
-                      {project.commit}
-                    </Text>
-                    <Group gap={6}>
-                      <Text c="dimmed" fz="xl">
-                        {project.updated}
-                      </Text>
-                      <IconGitBranch size="0.9rem" />
-                      <Text c="dimmed" fz="xl">
-                        {project.branch}
-                      </Text>
                     </Group>
-                  </Stack>
-
-                  <Group gap="xs" wrap="nowrap">
+                    <ActionIcon variant="subtle" color="gray" size="sm">
+                      <IconDots size="0.9rem" />
+                    </ActionIcon>
+                  </Group>
+                  <Text c="dimmed" fz="sm" truncate>
+                    {project.domain}
+                  </Text>
+                  <Text fw={600} lineClamp={2}>
+                    {project.commit}
+                  </Text>
+                  <Group gap={6}>
+                    <IconGitBranch size="0.85rem" />
+                    <Text c="dimmed" fz="sm" truncate>
+                      {project.branch}
+                    </Text>
+                    <Text c="dimmed" fz="sm">
+                      {project.updated}
+                    </Text>
+                  </Group>
+                  <Group justify="space-between" wrap="nowrap">
                     <Badge
                       variant="filled"
                       color="gray"
-                      size="lg"
-                      leftSection={<IconBrandGithub size="0.85rem" />}
+                      leftSection={<IconBrandGithub size="0.8rem" />}
                     >
                       {project.repo}
                     </Badge>
                     <ThemeIcon
-                      size={34}
+                      size={30}
                       radius="xl"
                       variant="outline"
                       color={project.status === 'warning' ? 'yellow' : 'gray'}
                     >
                       {project.status === 'warning' ? (
-                        <IconAlertCircle size="0.95rem" />
+                        <IconAlertCircle size="0.85rem" />
                       ) : (
-                        <IconWaveSine size="0.95rem" />
+                        <IconWaveSine size="0.85rem" />
                       )}
                     </ThemeIcon>
-                    <ActionIcon variant="subtle" color="gray" size="lg">
-                      <IconDots size="1rem" />
-                    </ActionIcon>
                   </Group>
-                </Group>
-              </Box>
+                </Stack>
+              </Card>
             ))}
-          </Stack>
-        </Card>
+          </SimpleGrid>
+        )}
       </Grid.Col>
     </Grid>
   );
