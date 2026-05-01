@@ -75,16 +75,16 @@ function Home() {
   return (
     <Stack gap="lg">
       <Group justify="space-between" align="center">
-        <Text fw={600} fz="xl">
+        <Text fw={600} fz="lg">
           Overview
         </Text>
-        <Badge color="gray" variant="light">
+        <Badge color="gray" variant="light" size="sm">
           Dark Mode
         </Badge>
       </Group>
 
       <Grid gutter="md">
-        <Grid.Col span={{ base: 12, lg: 4 }}>
+        <Grid.Col span={{ base: 12, xl: 4 }}>
           <Card
             bg="dark.8"
             withBorder
@@ -94,22 +94,24 @@ function Home() {
           >
             <Stack gap="sm">
               <Group justify="space-between">
-                <Text fw={600}>Usage</Text>
-                <Badge color="red" variant="light">
+                <Text fw={600} fz="sm">
+                  Usage
+                </Text>
+                <Badge color="red" variant="light" size="sm">
                   Paused
                 </Badge>
               </Group>
               {usageItems.map((item) => (
                 <Box key={item.label}>
-                  <Group justify="space-between" mb={6}>
-                    <Text fz="sm" c="gray.2">
+                  <Group justify="space-between" mb={5}>
+                    <Text fz="xs" c="gray.1">
                       {item.label}
                     </Text>
                     <Text fz="xs" c="dimmed">
                       {item.value}
                     </Text>
                   </Group>
-                  <Progress value={item.progress} size="xs" color="gray" />
+                  <Progress value={item.progress} size={5} color="gray" radius="xl" />
                 </Box>
               ))}
             </Stack>
@@ -124,23 +126,27 @@ function Home() {
             style={(theme) => ({ borderColor: theme.colors.dark[4] })}
           >
             <Stack gap="xs" align="center" py="md">
-              <ThemeIcon size={36} radius="xl" variant="light" color="gray">
-                <IconActivity size="1rem" />
+              <ThemeIcon size={34} radius="xl" variant="light" color="gray">
+                <IconActivity size="0.95rem" />
               </ThemeIcon>
-              <Text fw={600}>Get alerted for anomalies</Text>
-              <Text c="dimmed" fz="sm" ta="center">
+              <Text fw={600} fz="sm">
+                Get alerted for anomalies
+              </Text>
+              <Text c="dimmed" fz="xs" ta="center">
                 Automatically monitor your projects and get notifications.
               </Text>
             </Stack>
           </Card>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, lg: 8 }}>
+        <Grid.Col span={{ base: 12, xl: 8 }}>
           <Stack gap="sm">
-            <Text fw={600}>Projects</Text>
+            <Text fw={600} fz="sm">
+              Projects
+            </Text>
             <Grid gutter="md">
               {projects.map((project) => (
-                <Grid.Col key={project.name} span={{ base: 12, md: 6 }}>
+                <Grid.Col key={project.name} span={{ base: 12, lg: 6 }}>
                   <Card
                     bg="dark.8"
                     withBorder
@@ -148,38 +154,38 @@ function Home() {
                     p="md"
                     style={(theme) => ({ borderColor: theme.colors.dark[4] })}
                   >
-                    <Stack gap="xs">
+                    <Stack gap={8}>
                       <Group justify="space-between" align="flex-start" wrap="nowrap">
                         <Box style={{ minWidth: 0 }}>
-                          <Text fw={600} truncate>
+                          <Text fw={600} fz="sm" truncate>
                             {project.name}
                           </Text>
-                          <Text c="dimmed" fz="sm" truncate>
+                          <Text c="dimmed" fz="xs" truncate>
                             {project.domain}
                           </Text>
                         </Box>
-                        <ActionIcon variant="subtle" color="gray">
-                          <IconDots size="1rem" />
+                        <ActionIcon variant="subtle" color="gray" size="sm">
+                          <IconDots size="0.9rem" />
                         </ActionIcon>
                       </Group>
 
                       <Group gap={6} wrap="nowrap">
-                        <IconBrandGithub size="0.9rem" />
+                        <IconBrandGithub size="0.85rem" />
                         <Text fz="xs" c="gray.3" truncate>
                           {project.repo}
                         </Text>
                       </Group>
 
-                      <Text fz="sm" c="gray.2" lineClamp={2}>
+                      <Text fz="xs" c="gray.1" lineClamp={2}>
                         {project.commit}
                       </Text>
 
-                      <Group justify="space-between" mt={4}>
+                      <Group justify="space-between" mt={2}>
                         <Text fz="xs" c="dimmed">
                           {project.updated}
                         </Text>
                         <Group gap={4} wrap="nowrap">
-                          <IconGitBranch size="0.85rem" />
+                          <IconGitBranch size="0.8rem" />
                           <Text fz="xs" c="dimmed">
                             {project.branch}
                           </Text>

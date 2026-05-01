@@ -64,19 +64,19 @@ function MainWindow() {
       {
         tab: ESettingTab.Home,
         label: t('Projects'),
-        Icon: <IconCat size="1rem" />,
+        Icon: <IconCat size="0.95rem" />,
         Component: Home,
       },
       {
         tab: ESettingTab.Settings,
         label: t('Settings'),
-        Icon: <IconSettings size="1rem" />,
+        Icon: <IconSettings size="0.95rem" />,
         Component: Settings,
       },
       {
         tab: ESettingTab.About,
         label: t('About'),
-        Icon: <IconInfoCircle size="1rem" />,
+        Icon: <IconInfoCircle size="0.95rem" />,
         Component: About,
       },
     ],
@@ -86,10 +86,10 @@ function MainWindow() {
   const CurrentView = tabs.find((tab) => tab.tab === activeTab)?.Component;
 
   const sidebar = (
-    <Flex h="100%" direction="column" justify="space-between" p="sm" bg="dark.8">
+    <Flex h="100%" direction="column" justify="space-between" p={10} bg="dark.8">
       <Stack gap="sm">
-        <Group justify="space-between" align="center" px="xs" py={6}>
-          <Text fw={600} fz="sm">
+        <Group justify="space-between" align="center" px={4} py={6}>
+          <Text fw={600} fz="sm" c="gray.0">
             JustTodo
           </Text>
           <Badge variant="light" size="xs" color="gray">
@@ -107,14 +107,14 @@ function MainWindow() {
               }}
               style={(theme) => ({
                 borderRadius: theme.radius.sm,
-                padding: '8px 10px',
+                padding: '7px 10px',
                 backgroundColor: activeTab === tab.tab ? theme.colors.dark[6] : 'transparent',
                 border: `1px solid ${activeTab === tab.tab ? theme.colors.dark[4] : 'transparent'}`,
               })}
             >
-              <Group gap="sm" wrap="nowrap">
-                <Box c={activeTab === tab.tab ? 'gray.0' : 'dimmed'}>{tab.Icon}</Box>
-                <Text fz="sm" c={activeTab === tab.tab ? 'gray.0' : 'dimmed'}>
+              <Group gap={8} wrap="nowrap">
+                <Box c={activeTab === tab.tab ? 'gray.0' : 'dark.1'}>{tab.Icon}</Box>
+                <Text fz="13px" fw={500} c={activeTab === tab.tab ? 'gray.0' : 'dark.1'}>
                   {tab.label}
                 </Text>
               </Group>
@@ -130,17 +130,18 @@ function MainWindow() {
             onClick={() => toggleColorScheme()}
             style={(theme) => ({
               borderRadius: theme.radius.sm,
-              padding: '8px 10px',
+              padding: '7px 10px',
               border: `1px solid ${theme.colors.dark[4]}`,
+              backgroundColor: theme.colors.dark[7],
             })}
           >
-            <Group gap="sm" wrap="nowrap">
+            <Group gap={8} wrap="nowrap">
               {colorScheme === ColorSchemeType.Dark ? (
-                <IconSun size="1rem" />
+                <IconSun size="0.95rem" />
               ) : (
-                <IconMoonStars size="1rem" />
+                <IconMoonStars size="0.95rem" />
               )}
-              <Text fz="sm" c="dimmed">
+              <Text fz="13px" c="dark.1">
                 {t('Theme')}
               </Text>
             </Group>
@@ -153,7 +154,7 @@ function MainWindow() {
   return (
     <AppShell
       padding={0}
-      navbar={{ width: 240, breakpoint: 'sm', collapsed: { mobile: !mobileOpened } }}
+      navbar={{ width: 250, breakpoint: 'sm', collapsed: { mobile: !mobileOpened } }}
       bg="dark.9"
     >
       <AppShell.Navbar>{sidebar}</AppShell.Navbar>
@@ -162,7 +163,7 @@ function MainWindow() {
         <Flex direction="column" h="100vh">
           <Group
             px="md"
-            py="sm"
+            py={10}
             justify="space-between"
             wrap="nowrap"
             style={(theme) => ({
@@ -170,30 +171,36 @@ function MainWindow() {
               backgroundColor: theme.colors.dark[8],
             })}
           >
-            <Group gap="sm" wrap="nowrap" style={{ minWidth: 0 }}>
+            <Group gap={10} wrap="nowrap" style={{ minWidth: 0 }}>
               <Burger
                 opened={mobileOpened}
                 onClick={() => setMobileOpened((opened) => !opened)}
                 hiddenFrom="sm"
                 size="sm"
               />
-              <Button variant="subtle" rightSection={<IconChevronDown size="0.9rem" />}>
+              <Button
+                variant="subtle"
+                size="compact-sm"
+                color="gray"
+                rightSection={<IconChevronDown size="0.8rem" />}
+              >
                 {t('All Projects')}
               </Button>
               <Input
                 placeholder={t('Search Projects...')}
-                leftSection={<IconSearch size="0.9rem" />}
-                w={{ base: 160, sm: 360 }}
+                leftSection={<IconSearch size="0.85rem" />}
+                size="sm"
+                w={{ base: 160, sm: 340 }}
               />
             </Group>
-            <Group gap="xs" wrap="nowrap">
-              <ActionIcon variant="subtle" size="lg">
-                <IconLayoutGrid size="1rem" />
+            <Group gap={6} wrap="nowrap">
+              <ActionIcon variant="subtle" size="lg" color="gray">
+                <IconLayoutGrid size="0.95rem" />
               </ActionIcon>
-              <ActionIcon variant="subtle" size="lg">
-                <IconList size="1rem" />
+              <ActionIcon variant="subtle" size="lg" color="gray">
+                <IconList size="0.95rem" />
               </ActionIcon>
-              <Button leftSection={<IconPlus size="0.95rem" />} size="sm">
+              <Button leftSection={<IconPlus size="0.9rem" />} size="xs">
                 {t('Add New...')}
               </Button>
             </Group>
