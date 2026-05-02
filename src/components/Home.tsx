@@ -12,6 +12,8 @@ import {
   Stack,
   Text,
   ThemeIcon,
+  useMantineColorScheme,
+  type MantineTheme,
 } from '@mantine/core';
 import {
   IconActivity,
@@ -23,39 +25,52 @@ import {
   IconWaveSine,
   IconAlertCircle,
 } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
 import { projects, usageItems } from './home-data';
 
 interface HomeProps {
   layoutMode: 'grid' | 'list';
 }
 
+const getSurfaceColor = (theme: MantineTheme, isDark: boolean) =>
+  isDark ? theme.colors.dark[8] : theme.white;
+
+const getBorderColor = (theme: MantineTheme, isDark: boolean) =>
+  isDark ? theme.colors.dark[4] : theme.colors.gray[3];
+
 function Home({ layoutMode }: HomeProps) {
+  const { t } = useTranslation();
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === 'dark';
+
   return (
     <Grid gutter="md" align="stretch">
       <Grid.Col span={{ base: 12, xl: 4 }}>
         <Stack gap="md" h="100%">
           <Card
-            bg="dark.8"
             withBorder
             radius="md"
             p="md"
-            style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+            style={(theme) => ({
+              backgroundColor: getSurfaceColor(theme, isDark),
+              borderColor: getBorderColor(theme, isDark),
+            })}
           >
             <Stack gap="sm">
               <Group justify="space-between" wrap="nowrap">
                 <Stack gap={2} style={{ minWidth: 0 }}>
                   <Group gap={6} wrap="nowrap">
                     <Text fw={700} c="red.4">
-                      Paused
+                      {t('Paused')}
                     </Text>
                     <IconAlertCircle size="0.9rem" color="var(--mantine-color-red-4)" />
                   </Group>
                   <Text c="dimmed" fz="sm" truncate>
-                    Upgrade to resume service
+                    {t('Upgrade to resume service')}
                   </Text>
                 </Stack>
                 <Button size="xs" variant="light" color="gray">
-                  Upgrade
+                  {t('Upgrade')}
                 </Button>
               </Group>
 
@@ -65,10 +80,10 @@ function Home({ layoutMode }: HomeProps) {
                     <Group gap={6} wrap="nowrap" style={{ minWidth: 0 }}>
                       <IconInfoCircle size="0.75rem" />
                       <Text fz="md" fw={600} truncate>
-                        {item.label}
+                        {t(item.label)}
                       </Text>
                     </Group>
-                    <Text fz="md" c="gray.1">
+                    <Text fz="md" c={isDark ? 'gray.1' : 'gray.7'}>
                       {item.value}
                     </Text>
                   </Group>
@@ -79,45 +94,52 @@ function Home({ layoutMode }: HomeProps) {
           </Card>
 
           <Card
-            bg="dark.8"
             withBorder
             radius="md"
             p="md"
-            style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+            style={(theme) => ({
+              backgroundColor: getSurfaceColor(theme, isDark),
+              borderColor: getBorderColor(theme, isDark),
+            })}
           >
             <Text fw={700} fz="xl" mb="md">
-              Alerts
+              {t('Alerts')}
             </Text>
             <Stack gap="xs" align="center" py="md">
               <ThemeIcon size={42} radius="xl" variant="light" color="gray">
                 <IconActivity size="1rem" />
               </ThemeIcon>
-              <Text fw={700}>Get alerted for anomalies</Text>
+              <Text fw={700}>{t('Get alerted for anomalies')}</Text>
               <Text c="dimmed" fz="md" ta="center">
-                Automatically monitor your projects for anomalies and get notified.
+                {t('Automatically monitor your projects for anomalies and get notified.')}
               </Text>
               <Button variant="outline" size="sm" mt="xs">
-                Upgrade to Pro
+                {t('Upgrade to Pro')}
               </Button>
             </Stack>
           </Card>
 
           <Card
-            bg="dark.8"
             withBorder
             radius="md"
             p="md"
-            style={(theme) => ({ borderColor: theme.colors.dark[4], flex: 1 })}
+            style={(theme) => ({
+              backgroundColor: getSurfaceColor(theme, isDark),
+              borderColor: getBorderColor(theme, isDark),
+              flex: 1,
+            })}
           >
             <Text fw={700} fz="xl" mb="md">
-              Recent Previews
+              {t('Recent Previews')}
             </Text>
             <Stack gap="xs" align="center" justify="center" h="100%" py="md">
               <ThemeIcon size={42} radius="xl" variant="light" color="gray">
                 <IconExternalLink size="1rem" />
               </ThemeIcon>
               <Text c="dimmed" fz="lg" ta="center">
-                Preview deployments that you have recently visited or created will appear here.
+                {t(
+                  'Preview deployments that you have recently visited or created will appear here.',
+                )}
               </Text>
             </Stack>
           </Card>
@@ -127,11 +149,13 @@ function Home({ layoutMode }: HomeProps) {
       <Grid.Col span={{ base: 12, xl: 8 }}>
         {layoutMode === 'list' ? (
           <Card
-            bg="dark.8"
             withBorder
             radius="md"
             p={0}
-            style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+            style={(theme) => ({
+              backgroundColor: getSurfaceColor(theme, isDark),
+              borderColor: getBorderColor(theme, isDark),
+            })}
           >
             <Stack gap={0}>
               {projects.map((project, index) => (
@@ -140,7 +164,9 @@ function Home({ layoutMode }: HomeProps) {
                   p="md"
                   style={(theme) => ({
                     borderBottom:
-                      index === projects.length - 1 ? 'none' : `1px solid ${theme.colors.dark[4]}`,
+                      index === projects.length - 1
+                        ? 'none'
+                        : `1px solid ${getBorderColor(theme, isDark)}`,
                   })}
                 >
                   <Group justify="space-between" align="center" wrap="wrap">
@@ -213,11 +239,13 @@ function Home({ layoutMode }: HomeProps) {
             {projects.map((project) => (
               <Card
                 key={project.name}
-                bg="dark.8"
                 withBorder
                 radius="md"
                 p="md"
-                style={(theme) => ({ borderColor: theme.colors.dark[4] })}
+                style={(theme) => ({
+                  backgroundColor: getSurfaceColor(theme, isDark),
+                  borderColor: getBorderColor(theme, isDark),
+                })}
               >
                 <Stack gap="sm">
                   <Group justify="space-between" wrap="nowrap">
