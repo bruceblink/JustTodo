@@ -1,4 +1,4 @@
-import React, { MemoExoticComponent } from 'react';
+import React from 'react';
 import { DispatchType } from './IEvents.ts';
 
 export type ColorScheme = ColorSchemeType.Light | ColorSchemeType.Dark;
@@ -12,13 +12,6 @@ export enum ESettingTab {
   Home = 0,
   Settings = 1,
   About = 2,
-}
-
-export interface SideNavBarTabs {
-  Component: MemoExoticComponent<() => JSX.Element>;
-  Icon: React.ReactNode;
-  label: string;
-  tab: ESettingTab;
 }
 
 export interface ISettingStoreVariables {
@@ -41,11 +34,4 @@ export interface ISettingsContent {
   checked: boolean;
   dispatchType: DispatchType;
   component?: React.ReactNode;
-}
-
-export interface SettingButtonProps {
-  title: string;
-  description: string;
-  btnLabel: string;
-  btnFunction: () => void;
 }
