@@ -36,6 +36,7 @@ import {
   IconBuilding,
   IconUsers,
   IconDots,
+  IconInfoCircle,
 } from '@tabler/icons-react';
 
 import Home from './Home';
@@ -69,7 +70,7 @@ function MainWindow() {
       ? t('Settings')
       : activeTab === ESettingTab.About
         ? t('About')
-        : 'Overview';
+        : t('Overview');
 
   const navButtonStyle = (active: boolean) => (theme: MantineTheme) => ({
     borderRadius: theme.radius.sm,
@@ -83,19 +84,19 @@ function MainWindow() {
   });
 
   const primaryNav = [
-    { label: 'Deployments', icon: <IconRocket size="0.95rem" /> },
-    { label: 'Logs', icon: <IconListDetails size="0.95rem" /> },
-    { label: 'Analytics', icon: <IconChartBar size="0.95rem" /> },
-    { label: 'Speed Insights', icon: <IconBolt size="0.95rem" /> },
-    { label: 'Observability', icon: <IconEye size="0.95rem" /> },
-    { label: 'Firewall', icon: <IconShield size="0.95rem" /> },
-    { label: 'CDN', icon: <IconWorld size="0.95rem" /> },
+    { label: t('Deployments'), icon: <IconRocket size="0.95rem" /> },
+    { label: t('Logs'), icon: <IconListDetails size="0.95rem" /> },
+    { label: t('Analytics'), icon: <IconChartBar size="0.95rem" /> },
+    { label: t('Speed Insights'), icon: <IconBolt size="0.95rem" /> },
+    { label: t('Observability'), icon: <IconEye size="0.95rem" /> },
+    { label: t('Firewall'), icon: <IconShield size="0.95rem" /> },
+    { label: t('CDN'), icon: <IconWorld size="0.95rem" /> },
   ];
 
   const secondaryNav = [
-    { label: 'Environment Variables', icon: <IconBolt size="0.95rem" /> },
-    { label: 'Domains', icon: <IconWorld size="0.95rem" /> },
-    { label: 'Integrations', icon: <IconBuilding size="0.95rem" /> },
+    { label: t('Environment Variables'), icon: <IconBolt size="0.95rem" /> },
+    { label: t('Domains'), icon: <IconWorld size="0.95rem" /> },
+    { label: t('Integrations'), icon: <IconBuilding size="0.95rem" /> },
   ];
 
   return (
@@ -119,14 +120,14 @@ function MainWindow() {
                 </Text>
               </Group>
               <Badge color="red" variant="light" size="xs">
-                Paused
+                {t('Paused')}
               </Badge>
             </Group>
 
             <Input
               leftSection={<IconSearch size="0.9rem" />}
               rightSection={<Badge variant="outline">F</Badge>}
-              placeholder="Find..."
+              placeholder={t('Find...')}
               size="sm"
               styles={(theme) => ({
                 input: {
@@ -143,7 +144,7 @@ function MainWindow() {
               >
                 <Group gap={10} wrap="nowrap">
                   <IconFolder size="0.95rem" />
-                  <Text fw={500}>Projects</Text>
+                  <Text fw={500}>{t('Projects')}</Text>
                 </Group>
               </UnstyledButton>
               {primaryNav.map((item) => (
@@ -185,6 +186,15 @@ function MainWindow() {
                 <Text>{t('Settings')}</Text>
               </Group>
             </UnstyledButton>
+            <UnstyledButton
+              style={navButtonStyle(activeTab === ESettingTab.About)}
+              onClick={() => setActiveTab(ESettingTab.About)}
+            >
+              <Group gap={10} wrap="nowrap">
+                <IconInfoCircle size="0.95rem" />
+                <Text>{t('About')}</Text>
+              </Group>
+            </UnstyledButton>
             <UnstyledButton style={navButtonStyle(false)}>
               <Group justify="space-between" wrap="nowrap">
                 <Group gap={10} wrap="nowrap">
@@ -219,7 +229,7 @@ function MainWindow() {
               />
               {isHome ? (
                 <Button variant="subtle" rightSection={<IconChevronDown size="0.85rem" />}>
-                  All Projects
+                  {t('All Projects')}
                 </Button>
               ) : (
                 <Text fw={600}>{pageTitle}</Text>
@@ -265,7 +275,7 @@ function MainWindow() {
                   <IconList size="0.95rem" />
                 </ActionIcon>
                 <Button leftSection={<IconPlus size="0.9rem" />} size="sm" visibleFrom="sm">
-                  Add New...
+                  {t('Add New...')}
                 </Button>
               </Group>
             </Box>

@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { Card, Select, SegmentedControl, Stack, Text, useMantineColorScheme } from '@mantine/core';
 import { IconLanguage } from '@tabler/icons-react';
 import languages from '@/locale/languages.ts';
@@ -9,14 +9,7 @@ import { useSettingStore } from '@/hooks/useSettingStore.tsx';
 import { isEnabled } from '@tauri-apps/plugin-autostart';
 import { featureFlags } from '@/config/features.ts';
 import SettingSwitch from './SettingSwitch.tsx';
-
-interface ISettingsContent {
-  title: string;
-  description: string;
-  checked: boolean;
-  dispatchType: DispatchType;
-  component?: React.ReactNode;
-}
+import type { ISettingsContent } from '@/types/ISetting.ts';
 
 function Settings() {
   const { t, i18n } = useTranslation();
@@ -54,7 +47,7 @@ function Settings() {
     ? [
         {
           title: t('Auto start-up'),
-          description: t('Automatically open WindowPet every time u start the computer'),
+          description: t('Automatically open JustTodo every time u start the computer'),
           checked: allowAutoStartUp,
           dispatchType: DispatchType.SwitchAppAutoStartUp,
         },
@@ -82,8 +75,8 @@ function Settings() {
             value={theme}
             onChange={(value) => handleSettingChange(DispatchType.ChangeAppTheme, value)}
             data={[
-              { label: 'Dark', value: 'dark' },
-              { label: 'Light', value: 'light' },
+              { label: t('Dark'), value: 'dark' },
+              { label: t('Light'), value: 'light' },
             ]}
           />
         </Stack>
@@ -107,7 +100,7 @@ function Settings() {
           allowDeselect={false}
           checkIconPosition="right"
           label={t('Language')}
-          placeholder="Pick one"
+          placeholder={t('Pick one')}
           data={languages}
           maxDropdownHeight={400}
           value={i18n.language}
