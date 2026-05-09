@@ -1,14 +1,16 @@
 import { memo, useEffect, useState } from 'react';
-import { Anchor, Button, Flex, Text } from '@mantine/core';
+import { Anchor, Button, Card, Flex, Group, Stack, Text } from '@mantine/core';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import { getVersion } from '@tauri-apps/api/app';
 import { useTranslation } from 'react-i18next';
 import UpdaterModal from '@/components/UpdaterModal';
 import { useUpdater } from '@/hooks/useUpdater';
 import { REPOSITORY_URL, SPONSORING_URL } from '@/lib/author';
+import { getAppInfo, type AppInfo } from '@/services/desktop.ts';
 
 function About() {
   const [appVersion, setAppVersion] = useState('.....');
+  const [appInfo, setAppInfo] = useState<AppInfo | null>(null);
   const [updaterOpened, setUpdaterOpened] = useState(false);
   const { t } = useTranslation();
 
@@ -17,6 +19,7 @@ function About() {
 
   useEffect(() => {
     void getVersion().then(setAppVersion);
+    void getAppInfo().then(setAppInfo).catch(() => setAppInfo(null));
   }, []);
 
   const handleCheckForUpdates = async () => {
@@ -68,6 +71,28 @@ function About() {
           {t('Check for updates')}
         </Button>
       )}
+
+      <Card withBorder radius="md" w="100%" maw={480}>
+        <Stack gap="xs">
+          <Text fw={600}>Desktop diagnostics</Text>
+          <Group justify="space-between">
+            <Text c="dimmed">Package</Text>
+            <Text>{appInfo?.packageName ?? 'Unavailable'}</Text>
+          </Group>
+          <Group justify="space-between">
+            <Text c="dimmed">Platform</Text>
+            <Text>{appInfo?.platform ?? 'Unavailable'}</Text>
+          </Group>
+          <Group justify="space-between">
+            <Text c="dimmed">Environment</Text>
+            <Text>{appInfo ? (appInfo.dev ? 'Development' : 'Production') : 'Unavailable'}</Text>
+          </Group>
+          <Group justify="space-between">
+            <Text c="dimmed">Version source</Text>
+            <Text>{appInfo?.appVersion ?? appVersion}</Text>
+          </Group>
+        </Stack>
+      </Card>
 
       {titleAndLinks.map((item, index) => (
         <Text key={index} display="flex">

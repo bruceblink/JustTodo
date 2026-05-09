@@ -1,3 +1,4 @@
+use serde::Serialize;
 use std::sync::mpsc;
 use tauri::{Manager, WebviewWindow};
 use tauri_plugin_autostart::MacosLauncher;
@@ -8,12 +9,33 @@ use windows::Win32::Foundation::HWND;
 #[cfg(target_os = "windows")]
 use windows::Win32::UI::WindowsAndMessaging::{BringWindowToTop, SetForegroundWindow, SetWindowPos, ShowWindow, HWND_NOTOPMOST, HWND_TOPMOST, SWP_NOMOVE, SWP_NOSIZE, SWP_SHOWWINDOW, SW_RESTORE, SW_SHOW};
 
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct AppInfo {
+    app_version: String,
+    package_name: String,
+    platform: String,
+    dev: bool,
 }
 
+#[tauri::command]
+fn get_app_info(app: tauri::AppHandle) -> AppInfo {
+    AppInfo {
+        app_version: app.package_info().version.to_string(),
+        package_name: app.package_info().name.to_string(),
+        platform: std::env::consts::OS.to_string(),
+        dev: cfg!(debug_assertions),
+    }
+}
+
+#[tauri::command]
+fn show_main_window(app: tauri::AppHandle) -> Result<(), String> {
+    if let Some(window) = app.get_webview_window("main") {
+        surface_main_window(&window)
+    } else {
+        Err("main window is not available".to_string())
+    }
+}
 
 const AUTOSTART_HIDDEN_ARG: &str = "--justtodo-autostart-hidden";
 
@@ -34,7 +56,7 @@ pub fn run() {
         }))
         .plugin(tauri_plugin_autostart::init(
             MacosLauncher::LaunchAgent,
-            Some(vec![AUTOSTART_HIDDEN_ARG]), /* arbitrary number of args to pass to your app */
+            Some(vec![AUTOSTART_HIDDEN_ARG]),
         ))
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_opener::init())
@@ -50,7 +72,7 @@ pub fn run() {
             log::info!("App setup completed");
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![get_app_info, show_main_window])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
