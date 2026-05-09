@@ -26,29 +26,29 @@ function About() {
 
   const titleAndLinks = [
     {
-      title: t('Developed by:'),
+      title: 'Developed by:',
       link: { url: `https://github.com/bruceblink`, label: '@bruceblink' },
     },
     {
-      title: t('Source code:'),
+      title: 'Source code:',
       link: { url: REPOSITORY_URL, label: '@bruceblink/JustTodo' },
     },
     {
-      title: t('Report a bug:'),
+      title: 'Report a bug:',
       link: {
         url: `${REPOSITORY_URL}/issues`,
         label: '@bruceblink/JustTodo/issues',
       },
     },
     {
-      title: t('Community:'),
+      title: 'Community:',
       link: {
         url: `${REPOSITORY_URL}/discussions`,
         label: '@bruceblink/JustTodo/discussions',
       },
     },
     {
-      title: t('Buy me a coffee:'),
+      title: 'Buy me a coffee:',
       link: { url: SPONSORING_URL, label: 'BuyMeACoffee/@bruceblink' },
     },
   ];

@@ -1,10 +1,17 @@
-import { Box } from '@mantine/core';
-import { useSettingStore } from './hooks/useSettingStore';
+import { defaultAppSettings } from '@/settings/settingsSchema.ts';
 
 function Loading() {
-  const { theme } = useSettingStore();
+  const style = {
+    width: '100%',
+    height: '100vh',
+    backgroundColor: defaultAppSettings.theme === 'dark' ? '#141517' : '#fff',
+  };
 
-  return <Box w="100%" h="100vh" bg={theme === 'dark' ? 'dark.8' : 'white'} />;
+  return (
+    <>
+      <div style={style}></div>
+    </>
+  );
 }
 
 export default Loading;

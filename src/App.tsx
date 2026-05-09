@@ -6,56 +6,36 @@ import { ModalsProvider } from '@mantine/modals';
 
 import Loading from './Loading';
 import MainWindow from './components/MainWindow';
-import { useSettingStore } from './hooks/useSettingStore';
+import { ColorSchemeType } from './types/ISetting';
 
 function App() {
-  const { theme } = useSettingStore();
-
   return (
     <Suspense fallback={<Loading />}>
       <MantineProvider
-        forceColorScheme={theme}
+        defaultColorScheme={ColorSchemeType.Dark}
         theme={{
           fontFamily:
-            'Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
-          primaryColor: 'gray',
-          defaultRadius: 'sm',
+            'cursive, Siemreap, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
           colors: {
             dark: [
-              '#f3f4f6',
-              '#d1d5db',
-              '#9ca3af',
-              '#6b7280',
-              '#374151',
-              '#1f2937',
-              '#161b22',
-              '#11151b',
-              '#0d1117',
-              '#090c10',
+              '#C1C2C5',
+              '#A6A7AB',
+              '#909296',
+              '#5C5F66',
+              '#373A40',
+              '#2C2E33',
+              '#1A1B1E',
+              '#141517',
+              '#1A1B1E',
+              '#101113',
             ],
-          },
-          components: {
-            Card: {
-              defaultProps: {
-                withBorder: true,
-                radius: 'md',
-              },
-            },
-            Button: {
-              defaultProps: {
-                radius: 'sm',
-              },
-            },
-            ActionIcon: {
-              defaultProps: {
-                radius: 'sm',
-              },
-            },
           },
         }}
       >
+        {/* 全局能力，只挂一次 */}
         <Notifications position="top-center" limit={2} />
         <ModalsProvider>
+          {/* 桌面主窗口 */}
           <MainWindow />
         </ModalsProvider>
       </MantineProvider>

@@ -1,5 +1,5 @@
-import { memo, useEffect } from 'react';
-import { Card, Select, SegmentedControl, Stack, Text, useMantineColorScheme } from '@mantine/core';
+import React, { memo, useEffect } from 'react';
+import { Select } from '@mantine/core';
 import { IconLanguage } from '@tabler/icons-react';
 import languages from '@/locale/languages.ts';
 import { handleSettingChange } from '@utils/handleSettingChange.ts';
@@ -9,13 +9,18 @@ import { useSettingStore } from '@/hooks/useSettingStore.tsx';
 import { isEnabled } from '@tauri-apps/plugin-autostart';
 import { featureFlags } from '@/config/features.ts';
 import SettingSwitch from './SettingSwitch.tsx';
-import type { ISettingsContent } from '@/types/ISetting.ts';
+
+interface ISettingsContent {
+  title: string;
+  description: string;
+  checked: boolean;
+  dispatchType: DispatchType;
+  component?: React.ReactNode;
+}
 
 function Settings() {
   const { t, i18n } = useTranslation();
-  const { allowAutoStartUp, setAllowAutoStartUp, theme } = useSettingStore();
-  const { colorScheme } = useMantineColorScheme();
-  const isDark = colorScheme === 'dark';
+  const { allowAutoStartUp, setAllowAutoStartUp } = useSettingStore();
 
   useEffect(() => {
     if (!featureFlags.autostart) {
@@ -54,70 +59,27 @@ function Settings() {
       ]
     : [];
 
+  const SettingSwitches = settingSwitches.map((setting, index) => {
+    return <SettingSwitch {...setting} key={index} />;
+  });
+
   return (
-    <Stack gap="sm">
-      <Text fw={700} fz="xl">
-        {t('Settings')}
-      </Text>
-
-      <Card
-        withBorder
-        radius="md"
-        p="md"
-        style={(theme) => ({
-          borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-          backgroundColor: isDark ? theme.colors.dark[8] : theme.white,
-        })}
-      >
-        <Stack gap="xs">
-          <Text fw={600}>{t('Theme')}</Text>
-          <SegmentedControl
-            value={theme}
-            onChange={(value) => handleSettingChange(DispatchType.ChangeAppTheme, value)}
-            data={[
-              { label: t('Dark'), value: 'dark' },
-              { label: t('Light'), value: 'light' },
-            ]}
-          />
-        </Stack>
-      </Card>
-
-      {settingSwitches.map((setting) => (
-        <SettingSwitch {...setting} key={setting.dispatchType} />
-      ))}
-
-      <Card
-        withBorder
-        radius="md"
-        p="md"
-        style={(theme) => ({
-          borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-          backgroundColor: isDark ? theme.colors.dark[8] : theme.white,
-        })}
-      >
-        <Select
-          leftSection={<IconLanguage size="1rem" />}
-          allowDeselect={false}
-          checkIconPosition="right"
-          label={t('Language')}
-          placeholder={t('Pick one')}
-          data={languages}
-          maxDropdownHeight={400}
-          value={i18n.language}
-          onChange={(value) => handleSettingChange(DispatchType.ChangeAppLanguage, value as string)}
-          styles={(theme) => ({
-            input: {
-              backgroundColor: isDark ? theme.colors.dark[7] : theme.colors.gray[0],
-              borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-            },
-            dropdown: {
-              backgroundColor: isDark ? theme.colors.dark[8] : theme.white,
-              borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-            },
-          })}
-        />
-      </Card>
-    </Stack>
+    <>
+      {SettingSwitches}
+      <Select
+        leftSection={<IconLanguage />}
+        allowDeselect={false}
+        checkIconPosition={'right'}
+        my={'sm'}
+        label={t('Language')}
+        placeholder="Pick one"
+        // itemComponent={SelectItem}
+        data={languages}
+        maxDropdownHeight={400}
+        value={i18n.language}
+        onChange={(value) => handleSettingChange(DispatchType.ChangeAppLanguage, value as string)}
+      />
+    </>
   );
 }
 
