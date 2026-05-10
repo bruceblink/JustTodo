@@ -64,9 +64,8 @@ describe('About updater visibility', () => {
       </MantineProvider>,
     );
 
-    expect(screen.queryByText('Check for updates')).not.toBeInTheDocument();
-
     await waitFor(() => {
+      expect(screen.queryByText('Check for updates')).not.toBeInTheDocument();
       expect(screen.getByText('justtodo')).toBeInTheDocument();
     });
   });
@@ -88,7 +87,9 @@ describe('About updater visibility', () => {
       </MantineProvider>,
     );
 
-    expect(screen.getByText('Check for updates')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Check for updates')).toBeInTheDocument();
+    });
   });
 });
 
