@@ -9,10 +9,12 @@
 ## 前置条件
 
 1. 在仓库 Secrets 配置（仅当 `package.json.scaffold.features.updater=true` 时必须）：
+
 - `TAURI_SIGNING_PRIVATE_KEY`
 - `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`
 
 2. `src-tauri/tauri.conf.json` 中已正确配置：
+
 - `plugins.updater.endpoints`
 - `plugins.updater.pubkey`
 - `bundle.createUpdaterArtifacts = true`
@@ -27,6 +29,7 @@ git push origin v0.1.1
 ```
 
 2. 手动触发：
+
 - GitHub Actions 页面选择 `publish` 工作流 -> `Run workflow`
 
 ## 工作流行为
@@ -49,6 +52,7 @@ git push origin v0.1.1
 ## 本地一键发布
 
 可在本地执行以下命令自动完成：
+
 - 版本号更新
 - 版本一致性校验
 - 本地质量门禁（lint/typecheck/test/cargo check）

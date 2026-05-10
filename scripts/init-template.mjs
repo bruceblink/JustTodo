@@ -36,12 +36,7 @@ function parseBooleanArg(value, fallback) {
   if (normalized === 'true' || normalized === '1' || normalized === 'yes' || normalized === 'on') {
     return true;
   }
-  if (
-    normalized === 'false' ||
-    normalized === '0' ||
-    normalized === 'no' ||
-    normalized === 'off'
-  ) {
+  if (normalized === 'false' || normalized === '0' || normalized === 'no' || normalized === 'off') {
     return false;
   }
   return fallback;
@@ -59,7 +54,10 @@ function parseGitHubRepo(repoUrl) {
   try {
     const url = new URL(repoUrl);
     if (!url.hostname.includes('github.com')) return null;
-    const parts = url.pathname.replace(/^\//, '').replace(/\.git$/, '').split('/');
+    const parts = url.pathname
+      .replace(/^\//, '')
+      .replace(/\.git$/, '')
+      .split('/');
     if (parts.length < 2) return null;
     return { owner: parts[0], repo: parts[1], slug: `${parts[0]}/${parts[1]}` };
   } catch {
@@ -108,7 +106,8 @@ async function main() {
   const authorEmail = required(args, 'author-email');
   const authorUrl = required(args, 'author-url');
   const repositoryUrl = required(args, 'repository-url');
-  const sponsoringUrl = args['sponsoring-url'] && args['sponsoring-url'] !== 'true' ? args['sponsoring-url'] : '';
+  const sponsoringUrl =
+    args['sponsoring-url'] && args['sponsoring-url'] !== 'true' ? args['sponsoring-url'] : '';
   const updaterEndpoint =
     args['updater-endpoint'] && args['updater-endpoint'] !== 'true'
       ? args['updater-endpoint']
@@ -191,28 +190,54 @@ async function main() {
     ]);
 
     await replaceTextFile('src-tauri/src/lib.rs', [
-      [/const AUTOSTART_HIDDEN_ARG: &str = ".*";/, `const AUTOSTART_HIDDEN_ARG: &str = "${autostartArg}";`],
+      [
+        /const AUTOSTART_HIDDEN_ARG: &str = ".*";/,
+        `const AUTOSTART_HIDDEN_ARG: &str = "${autostartArg}";`,
+      ],
     ]);
 
     await replaceTextFile('src/components/About.tsx', [
       [/<Text fw=\{700\}>.*<\/Text>/, `<Text fw={700}>${appName}</Text>`],
-      [/link: \{ url: `https:\/\/github\.com\/[^`]+`, label: '@[^']+' \}/, `link: { url: \`https://github.com/${gh?.owner ?? authorName}\`, label: '@${gh?.owner ?? authorName}' }`],
-      [/label: '@[^']+\/[^']+'/, `label: '@${gh?.slug ?? repositoryUrl.replace(/^https?:\/\//, '')}'`],
-      [/label: '@[^']+\/[^']+\/issues'/, `label: '@${gh?.slug ?? repositoryUrl.replace(/^https?:\/\//, '')}/issues'`],
-      [/label: '@[^']+\/[^']+\/discussions'/, `label: '@${gh?.slug ?? repositoryUrl.replace(/^https?:\/\//, '')}/discussions'`],
+      [
+        /link: \{ url: `https:\/\/github\.com\/[^`]+`, label: '@[^']+' \}/,
+        `link: { url: \`https://github.com/${gh?.owner ?? authorName}\`, label: '@${gh?.owner ?? authorName}' }`,
+      ],
+      [
+        /label: '@[^']+\/[^']+'/,
+        `label: '@${gh?.slug ?? repositoryUrl.replace(/^https?:\/\//, '')}'`,
+      ],
+      [
+        /label: '@[^']+\/[^']+\/issues'/,
+        `label: '@${gh?.slug ?? repositoryUrl.replace(/^https?:\/\//, '')}/issues'`,
+      ],
+      [
+        /label: '@[^']+\/[^']+\/discussions'/,
+        `label: '@${gh?.slug ?? repositoryUrl.replace(/^https?:\/\//, '')}/discussions'`,
+      ],
       [/label: 'BuyMeACoffee\/[^']*'/, `label: '${sponsorLabel(sponsoringUrl)}'`],
     ]);
 
     await replaceTextFile('src/components/UpdaterModal.tsx', [
-      [/\{t\('.* v\{\{version\}\} is available!', \{ version: update\.version \}\)\}/, `{t('${appName} v{{version}} is available!', { version: update.version })}`],
-      [/openUrl\('https:\/\/github\.com\/[^']+\/releases\/latest'\)/, `openUrl('${repositoryUrl.replace(/\/$/, '')}/releases/latest')`],
+      [
+        /\{t\('.* v\{\{version\}\} is available!', \{ version: update\.version \}\)\}/,
+        `{t('${appName} v{{version}} is available!', { version: update.version })}`,
+      ],
+      [
+        /openUrl\('https:\/\/github\.com\/[^']+\/releases\/latest'\)/,
+        `openUrl('${repositoryUrl.replace(/\/$/, '')}/releases/latest')`,
+      ],
     ]);
 
     await replaceTextFile('src/components/settings-ui/Settings.tsx', [
-      [/Automatically open .* every time u start the computer/, `Automatically open ${appName} every time u start the computer`],
+      [
+        /Automatically open .* every time u start the computer/,
+        `Automatically open ${appName} every time u start the computer`,
+      ],
     ]);
 
-    await replaceTextFile('README.md', [[/^# .+ - Tauri 2\.0 脚手架/m, `# ${appName} - Tauri 2.0 脚手架`]]);
+    await replaceTextFile('README.md', [
+      [/^# .+ - Tauri 2\.0 脚手架/m, `# ${appName} - Tauri 2.0 脚手架`],
+    ]);
   }
 
   console.log('Template initialization summary:');

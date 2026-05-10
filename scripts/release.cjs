@@ -91,11 +91,14 @@ try {
   }
   run('cargo check --manifest-path src-tauri/Cargo.toml');
 
-  run('git add package.json src-tauri/package.json src-tauri/tauri.conf.json Cargo.toml Cargo.lock src-tauri/Cargo.lock');
-  const hasStagedChanges = execSync('git diff --cached --quiet; echo $LASTEXITCODE', {
-    encoding: 'utf8',
-    shell: 'powershell',
-  }).trim() !== '0';
+  run(
+    'git add package.json src-tauri/package.json src-tauri/tauri.conf.json Cargo.toml Cargo.lock src-tauri/Cargo.lock',
+  );
+  const hasStagedChanges =
+    execSync('git diff --cached --quiet; echo $LASTEXITCODE', {
+      encoding: 'utf8',
+      shell: 'powershell',
+    }).trim() !== '0';
   if (hasStagedChanges) {
     run(`git -c commit.gpgsign=false commit -m "chore(release): v${newVersion}"`);
   } else {
