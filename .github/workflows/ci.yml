@@ -63,6 +63,9 @@ jobs:
       - name: Unit tests
         run: pnpm test -- --run
 
+      - name: Smoke tests
+        run: pnpm test:smoke
+
       - name: Build web
         run: pnpm build
 
