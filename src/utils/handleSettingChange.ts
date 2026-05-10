@@ -6,6 +6,7 @@ import { info } from '@tauri-apps/plugin-log';
 import { disable, enable, isEnabled } from '@tauri-apps/plugin-autostart';
 import { patchAppSettings } from '@/settings/settingsPersistence.ts';
 import { featureFlags } from '@/config/features.ts';
+import { setCloseToTray as applyCloseToTrayPolicy } from '@/services/desktop.ts';
 
 interface IHandleSettingChange {
   (dispatchType: DispatchType, newValue: string | boolean | number): void;
@@ -26,7 +27,7 @@ export function toggleAutoStartUp(allowAutoStartUp: boolean) {
 }
 
 export const handleSettingChange: IHandleSettingChange = (dispatchType, newValue) => {
-  const { setLanguage, setTheme, setAllowAutoStartUp } = useSettingStore.getState();
+  const { setLanguage, setTheme, setAllowAutoStartUp, setCloseToTray } = useSettingStore.getState();
 
   void info(`Change setting, type: ${dispatchType}, value: ${newValue}`);
 
@@ -45,6 +46,11 @@ export const handleSettingChange: IHandleSettingChange = (dispatchType, newValue
       toggleAutoStartUp(newValue as boolean);
       setAllowAutoStartUp(newValue as boolean);
       void patchAppSettings({ allowAutoStartUp: newValue as boolean });
+      return;
+    case DispatchType.SwitchCloseToTray:
+      setCloseToTray(newValue as boolean);
+      void applyCloseToTrayPolicy(newValue as boolean);
+      void patchAppSettings({ closeToTray: newValue as boolean });
       return;
     default:
       return;

@@ -15,6 +15,7 @@ export const defaultAppSettings: AppSettings = {
   language: fallbackLanguage,
   theme: fallbackTheme,
   allowAutoStartUp: defaultSettingsJson.allowAutoStartUp ?? false,
+  closeToTray: true,
 };
 
 function isObject(value: unknown): value is Record<string, unknown> {
@@ -39,6 +40,10 @@ function normalizeAutoStart(value: unknown): boolean {
   return typeof value === 'boolean' ? value : defaultAppSettings.allowAutoStartUp;
 }
 
+function normalizeCloseToTray(value: unknown): boolean {
+  return typeof value === 'boolean' ? value : defaultAppSettings.closeToTray;
+}
+
 export function normalizeSettings(input: unknown): AppSettings {
   if (!isObject(input)) {
     return { ...defaultAppSettings };
@@ -49,5 +54,6 @@ export function normalizeSettings(input: unknown): AppSettings {
     language: normalizeLanguage(input.language),
     theme: normalizeTheme(input.theme),
     allowAutoStartUp: normalizeAutoStart(input.allowAutoStartUp),
+    closeToTray: normalizeCloseToTray(input.closeToTray),
   };
 }

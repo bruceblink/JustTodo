@@ -12,7 +12,7 @@ license = "AGPL-3.0-or-later"
 repository = "https://github.com/bruceblink/JustTodo"
 
 [workspace.dependencies]
-tauri = { version = "2", features = [] }
+tauri = { version = "2", features = ["tray-icon"] }
 tauri-plugin-opener = "2"
 tauri-plugin-log = { version = "2", features = ["tracing"] }
 tauri-plugin-autostart = "2"

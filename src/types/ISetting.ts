@@ -25,6 +25,7 @@ export interface ISettingStoreVariables {
   language: string;
   theme: ColorScheme;
   allowAutoStartUp: boolean;
+  closeToTray: boolean;
 }
 
 export interface ISettingStoreState extends ISettingStoreVariables {
@@ -32,6 +33,7 @@ export interface ISettingStoreState extends ISettingStoreVariables {
   setLanguage: (newLanguage: string) => void;
   setTheme: (newTheme: ColorScheme) => void;
   setAllowAutoStartUp: (newBoolean: boolean) => void;
+  setCloseToTray: (newBoolean: boolean) => void;
   initSettings: () => Promise<void>;
 }
 

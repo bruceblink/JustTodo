@@ -4,7 +4,7 @@
   "title": "JustTodo Settings Schema",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "language", "theme", "allowAutoStartUp"],
+  "required": ["version", "language", "theme", "allowAutoStartUp", "closeToTray"],
   "properties": {
     "version": {
       "type": "integer",
@@ -19,6 +19,9 @@
       "enum": ["light", "dark"]
     },
     "allowAutoStartUp": {
+      "type": "boolean"
+    },
+    "closeToTray": {
       "type": "boolean"
     }
   }

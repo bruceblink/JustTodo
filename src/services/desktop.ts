@@ -14,3 +14,7 @@ export function getAppInfo() {
 export function showMainWindow() {
   return invoke<void>('show_main_window');
 }
+
+export function setCloseToTray(enabled: boolean) {
+  return invoke<void>('set_close_to_tray', { enabled });
+}

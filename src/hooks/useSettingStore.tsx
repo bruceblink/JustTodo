@@ -18,6 +18,10 @@ export const useSettingStore = create<ISettingStoreState>()((set) => ({
   setAllowAutoStartUp: (newBoolean) => {
     set({ allowAutoStartUp: newBoolean });
   },
+  closeToTray: defaultAppSettings.closeToTray,
+  setCloseToTray: (newBoolean) => {
+    set({ closeToTray: newBoolean });
+  },
   initSettings: async () => {
     const settings = await loadAppSettings();
     set({
@@ -25,6 +29,7 @@ export const useSettingStore = create<ISettingStoreState>()((set) => ({
       language: settings.language,
       theme: settings.theme,
       allowAutoStartUp: settings.allowAutoStartUp,
+      closeToTray: settings.closeToTray,
     });
   },
 }));

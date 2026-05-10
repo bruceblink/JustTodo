@@ -20,7 +20,7 @@ interface ISettingsContent {
 
 function Settings() {
   const { t, i18n } = useTranslation();
-  const { allowAutoStartUp, setAllowAutoStartUp } = useSettingStore();
+  const { allowAutoStartUp, closeToTray, setAllowAutoStartUp } = useSettingStore();
 
   useEffect(() => {
     if (!featureFlags.autostart) {
@@ -48,16 +48,24 @@ function Settings() {
     };
   }, [setAllowAutoStartUp]);
 
-  const settingSwitches: ISettingsContent[] = featureFlags.autostart
-    ? [
-        {
-          title: t('Auto start-up'),
-          description: t('Automatically open JustTodo every time u start the computer'),
-          checked: allowAutoStartUp,
-          dispatchType: DispatchType.SwitchAppAutoStartUp,
-        },
-      ]
-    : [];
+  const settingSwitches: ISettingsContent[] = [
+    ...(featureFlags.autostart
+      ? [
+          {
+            title: t('Auto start-up'),
+            description: t('Automatically open JustTodo every time u start the computer'),
+            checked: allowAutoStartUp,
+            dispatchType: DispatchType.SwitchAppAutoStartUp,
+          },
+        ]
+      : []),
+    {
+      title: t('Close to tray'),
+      description: t('Hide JustTodo to the system tray when closing the main window'),
+      checked: closeToTray,
+      dispatchType: DispatchType.SwitchCloseToTray,
+    },
+  ];
 
   const SettingSwitches = settingSwitches.map((setting, index) => {
     return <SettingSwitch {...setting} key={index} />;
@@ -73,7 +81,6 @@ function Settings() {
         my={'sm'}
         label={t('Language')}
         placeholder="Pick one"
-        // itemComponent={SelectItem}
         data={languages}
         maxDropdownHeight={400}
         value={i18n.language}
