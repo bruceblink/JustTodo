@@ -1,16 +1,33 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+import path from 'node:path';
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+      '@components': path.resolve(__dirname, 'src/components'),
+      '@utils': path.resolve(__dirname, 'src/utils'),
+      '@features': path.resolve(__dirname, 'src/features'),
+      '@shared': path.resolve(__dirname, 'src/shared'),
+      '@platform': path.resolve(__dirname, 'src/platform'),
+    },
+  },
   test: {
-    globals: true, // 使用全局 describe/it/expect
-    environment: 'jsdom', // 模拟浏览器环境
-    setupFiles: './vitest.setup.ts', // 全局测试初始化
-    include: ['src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}'], // 测试文件匹配
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './vitest.setup.ts',
+    include: ['src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}'],
     coverage: {
-      provider: 'istanbul', // 覆盖率
+      provider: 'istanbul',
       reporter: ['text', 'lcov'],
+      thresholds: {
+        lines: 35,
+        functions: 35,
+        branches: 30,
+        statements: 35,
+      },
     },
   },
 });

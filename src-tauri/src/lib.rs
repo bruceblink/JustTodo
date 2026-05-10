@@ -1,6 +1,10 @@
 use serde::Serialize;
 use std::sync::{mpsc, Arc, Mutex};
-use tauri::{menu::{Menu, MenuItem}, tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent}, Manager, WebviewWindow, WindowEvent};
+use tauri::{
+    menu::{Menu, MenuItem},
+    tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
+    Manager, WebviewWindow, WindowEvent,
+};
 use tauri_plugin_autostart::MacosLauncher;
 use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 use tauri_plugin_log::log;
@@ -8,7 +12,10 @@ use tauri_plugin_store::StoreExt;
 #[cfg(target_os = "windows")]
 use windows::Win32::Foundation::HWND;
 #[cfg(target_os = "windows")]
-use windows::Win32::UI::WindowsAndMessaging::{BringWindowToTop, SetForegroundWindow, SetWindowPos, ShowWindow, HWND_NOTOPMOST, HWND_TOPMOST, SWP_NOMOVE, SWP_NOSIZE, SWP_SHOWWINDOW, SW_RESTORE, SW_SHOW};
+use windows::Win32::UI::WindowsAndMessaging::{
+    BringWindowToTop, SetForegroundWindow, SetWindowPos, ShowWindow, HWND_NOTOPMOST, HWND_TOPMOST,
+    SWP_NOMOVE, SWP_NOSIZE, SWP_SHOWWINDOW, SW_RESTORE, SW_SHOW,
+};
 
 const AUTOSTART_HIDDEN_ARG: &str = "--justtodo-autostart-hidden";
 const SETTINGS_FILE: &str = "settings.json";
@@ -88,12 +95,13 @@ pub fn run() {
                 close_to_tray: Arc::new(Mutex::new(close_to_tray)),
             });
 
-            let show_item = MenuItem::with_id(app, TRAY_SHOW_ID, "Show JustTodo", true, None::<&str>)
-                .map_err(|err| err.to_string())?;
+            let show_item =
+                MenuItem::with_id(app, TRAY_SHOW_ID, "Show JustTodo", true, None::<&str>)
+                    .map_err(|err| err.to_string())?;
             let quit_item = MenuItem::with_id(app, TRAY_QUIT_ID, "Quit", true, None::<&str>)
                 .map_err(|err| err.to_string())?;
-            let tray_menu = Menu::with_items(app, &[&show_item, &quit_item])
-                .map_err(|err| err.to_string())?;
+            let tray_menu =
+                Menu::with_items(app, &[&show_item, &quit_item]).map_err(|err| err.to_string())?;
 
             let mut tray_builder = TrayIconBuilder::with_id("main-tray")
                 .menu(&tray_menu)
@@ -160,15 +168,49 @@ pub fn run() {
             log::info!("App setup completed");
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![get_app_info, show_main_window, set_close_to_tray])
+        .invoke_handler(tauri::generate_handler![
+            get_app_info,
+            show_main_window,
+            set_close_to_tray
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+fn read_close_to_tray_from_json(settings: &serde_json::Value) -> Option<bool> {
+    settings.get("closeToTray")?.as_bool()
 }
 
 fn read_close_to_tray_setting(app: &tauri::AppHandle) -> Option<bool> {
     let store = app.store(SETTINGS_FILE).ok()?;
     let settings = store.get(SETTINGS_KEY)?;
-    settings.get("closeToTray")?.as_bool()
+    read_close_to_tray_from_json(&settings)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::read_close_to_tray_from_json;
+
+    #[test]
+    fn reads_close_to_tray_true() {
+        let value = serde_json::json!({ "closeToTray": true });
+        assert_eq!(read_close_to_tray_from_json(&value), Some(true));
+    }
+
+    #[test]
+    fn reads_close_to_tray_false() {
+        let value = serde_json::json!({ "closeToTray": false });
+        assert_eq!(read_close_to_tray_from_json(&value), Some(false));
+    }
+
+    #[test]
+    fn returns_none_when_missing_or_invalid() {
+        let missing = serde_json::json!({ "theme": "dark" });
+        let invalid = serde_json::json!({ "closeToTray": "yes" });
+
+        assert_eq!(read_close_to_tray_from_json(&missing), None);
+        assert_eq!(read_close_to_tray_from_json(&invalid), None);
+    }
 }
 
 #[cfg(target_os = "windows")]
@@ -176,15 +218,16 @@ fn surface_main_window(window: &WebviewWindow) -> Result<(), String> {
     let window_for_handle = window.clone();
     let (tx, rx) = mpsc::channel();
 
-    window.run_on_main_thread(move || {
+    window
+        .run_on_main_thread(move || {
             let result = (|| -> Result<(), String> {
-                let hwnd :HWND = window_for_handle.hwnd().map_err(|err| err.to_string())?;
+                let hwnd: HWND = window_for_handle.hwnd().map_err(|err| err.to_string())?;
 
                 unsafe {
-                   let _ = ShowWindow(hwnd, SW_RESTORE);
-                   let _ = ShowWindow(hwnd, SW_SHOW);
-                   let _ = SetForegroundWindow(hwnd);
-                   let _ = SetWindowPos(
+                    let _ = ShowWindow(hwnd, SW_RESTORE);
+                    let _ = ShowWindow(hwnd, SW_SHOW);
+                    let _ = SetForegroundWindow(hwnd);
+                    let _ = SetWindowPos(
                         hwnd,
                         Some(HWND_TOPMOST),
                         0,
@@ -193,7 +236,7 @@ fn surface_main_window(window: &WebviewWindow) -> Result<(), String> {
                         0,
                         SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW,
                     );
-                   let _ = SetWindowPos(
+                    let _ = SetWindowPos(
                         hwnd,
                         Some(HWND_NOTOPMOST),
                         0,
@@ -202,7 +245,7 @@ fn surface_main_window(window: &WebviewWindow) -> Result<(), String> {
                         0,
                         SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW,
                     );
-                   let _ = BringWindowToTop(hwnd);
+                    let _ = BringWindowToTop(hwnd);
                 }
 
                 if let Err(err) = window_for_handle.unminimize() {
@@ -222,7 +265,8 @@ fn surface_main_window(window: &WebviewWindow) -> Result<(), String> {
         })
         .map_err(|err| err.to_string())?;
 
-    rx.recv().map_err(|_| "failed to surface window on main thread".to_string())?
+    rx.recv()
+        .map_err(|_| "failed to surface window on main thread".to_string())?
 }
 
 #[cfg(not(target_os = "windows"))]
