@@ -46,7 +46,9 @@ function Home() {
           <Text fw={700} size="xl">
             Todo Inbox
           </Text>
-          <Text c="dimmed">Capture tasks locally and keep them available after the app restarts.</Text>
+          <Text c="dimmed">
+            Capture tasks locally and keep them available after the app restarts.
+          </Text>
         </div>
         <Group gap="xs">
           <Badge variant="light">{items.length} total</Badge>
@@ -92,7 +94,11 @@ function Home() {
               <Card key={item.id} withBorder radius="md" p="md">
                 <Flex align="center" justify="space-between" gap="md" wrap="wrap">
                   <Group align="flex-start" style={{ flex: 1 }}>
-                    <Checkbox checked={item.completed} onChange={() => void toggleTodo(item.id)} mt={2} />
+                    <Checkbox
+                      checked={item.completed}
+                      onChange={() => void toggleTodo(item.id)}
+                      mt={2}
+                    />
                     <Stack gap={4} style={{ flex: 1 }}>
                       {isEditing ? (
                         <TextInput
@@ -105,7 +111,10 @@ function Home() {
                           }}
                         />
                       ) : (
-                        <Text td={item.completed ? 'line-through' : undefined} c={item.completed ? 'dimmed' : undefined}>
+                        <Text
+                          td={item.completed ? 'line-through' : undefined}
+                          c={item.completed ? 'dimmed' : undefined}
+                        >
                           {item.title}
                         </Text>
                       )}
@@ -117,15 +126,26 @@ function Home() {
 
                   <Group gap="xs">
                     {isEditing ? (
-                      <ActionIcon variant="light" color="green" onClick={() => void handleSubmitEdit()}>
+                      <ActionIcon
+                        variant="light"
+                        color="green"
+                        onClick={() => void handleSubmitEdit()}
+                      >
                         <IconCheck size="1rem" />
                       </ActionIcon>
                     ) : (
-                      <ActionIcon variant="light" onClick={() => handleStartEdit(item.id, item.title)}>
+                      <ActionIcon
+                        variant="light"
+                        onClick={() => handleStartEdit(item.id, item.title)}
+                      >
                         <IconPencil size="1rem" />
                       </ActionIcon>
                     )}
-                    <ActionIcon variant="light" color="red" onClick={() => void removeTodo(item.id)}>
+                    <ActionIcon
+                      variant="light"
+                      color="red"
+                      onClick={() => void removeTodo(item.id)}
+                    >
                       <IconTrash size="1rem" />
                     </ActionIcon>
                   </Group>

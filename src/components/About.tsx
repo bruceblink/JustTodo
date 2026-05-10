@@ -19,7 +19,9 @@ function About() {
 
   useEffect(() => {
     void getVersion().then(setAppVersion);
-    void getAppInfo().then(setAppInfo).catch(() => setAppInfo(null));
+    void getAppInfo()
+      .then(setAppInfo)
+      .catch(() => setAppInfo(null));
   }, []);
 
   const handleCheckForUpdates = async () => {
