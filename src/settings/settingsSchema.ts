@@ -15,7 +15,7 @@ export const defaultAppSettings: AppSettings = {
   language: fallbackLanguage,
   theme: fallbackTheme,
   allowAutoStartUp: defaultSettingsJson.allowAutoStartUp ?? false,
-  closeToTray: true,
+  closeToTray: defaultSettingsJson.closeToTray ?? true,
 };
 
 function isObject(value: unknown): value is Record<string, unknown> {

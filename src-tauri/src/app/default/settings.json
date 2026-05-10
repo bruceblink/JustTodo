@@ -5,6 +5,7 @@
     "allowPetInteraction": true,
     "allowPetClimbing": true,
     "allowAutoStartUp": false,
+    "closeToTray": true,
     "allowOverridePetScale": true,
     "petScale": 0.7
 }
