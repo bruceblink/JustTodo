@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+set -e
+
+printf "\n[pre-push] Running smoke tests...\n"
+pnpm test:smoke
+
+printf "\n[pre-push] Running unit tests with coverage...\n"
+pnpm test -- --run --coverage
+
+printf "\n[pre-push] Running web build...\n"
+pnpm build
+
+printf "\n[pre-push] Running Rust tests...\n"
+cargo test --manifest-path src-tauri/Cargo.toml
+
+printf "\n[pre-push] All checks passed.\n"
