@@ -19,4 +19,30 @@ describe('normalizeSettings', () => {
     expect(result.closeToTray).toBe(false);
     expect(result.version).toBe(defaultAppSettings.version);
   });
+
+  it('falls back when language and theme are blank strings', () => {
+    const result = normalizeSettings({
+      language: '   ',
+      theme: '   ',
+      allowAutoStartUp: true,
+      closeToTray: true,
+    });
+
+    expect(result.language).toBe(defaultAppSettings.language);
+    expect(result.theme).toBe(defaultAppSettings.theme);
+    expect(result.allowAutoStartUp).toBe(true);
+    expect(result.closeToTray).toBe(true);
+  });
+
+  it('falls back when closeToTray and autostart are non-boolean', () => {
+    const result = normalizeSettings({
+      language: 'en',
+      theme: 'dark',
+      allowAutoStartUp: 1,
+      closeToTray: 'false',
+    });
+
+    expect(result.allowAutoStartUp).toBe(defaultAppSettings.allowAutoStartUp);
+    expect(result.closeToTray).toBe(defaultAppSettings.closeToTray);
+  });
 });
