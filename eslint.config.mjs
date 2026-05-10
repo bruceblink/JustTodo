@@ -9,7 +9,16 @@ import prettierPlugin from 'eslint-plugin-prettier';
 /** @type {import('eslint').FlatConfig[]} */
 const config = [
   {
-    ignores: ['node_modules/', 'dist/', 'build/', 'target/', 'src-tauri/', '.vscode/', '.idea/'],
+    ignores: [
+      'node_modules/',
+      'dist/',
+      'build/',
+      'target/',
+      'src-tauri/',
+      '.vscode/',
+      '.idea/',
+      '.claude',
+    ],
   },
 
   // =======================
