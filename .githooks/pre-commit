@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+set -e
+
+printf "\n[pre-commit] Running pnpm lint...\n"
+pnpm lint
+
+printf "\n[pre-commit] Running cargo fmt check...\n"
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+
+printf "\n[pre-commit] Running cargo clippy...\n"
+cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings
+
+printf "\n[pre-commit] All checks passed.\n"
