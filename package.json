@@ -29,6 +29,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:watch": "vitest --watch",
+    "test:smoke": "vitest --run src/settings/settingsPersistence.smoke.test.ts src/todos/todoPersistence.smoke.test.ts",
     "preview": "vite preview",
     "tauri": "tauri",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
